@@ -40,7 +40,6 @@ const WeeklyCalendar = () => {
     navigate('/workout-session');
   };
 
-
   return (
     <div className="p-4">
       <h2 className="mb-4 text-2xl font-medium">Entrainements</h2>
@@ -79,7 +78,8 @@ const WeeklyCalendar = () => {
           aria-label="Go to session"
         >
           <span className="text-gray-500">→</span>
-        </button>     </div>
+        </button>
+      </div>
     </div>
   );
 };
