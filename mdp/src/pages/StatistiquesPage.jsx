@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Typography, Box } from '@mui/material';
-import {
-  CircularProgressCard,
-  ProgressTab,
-  WeightProgressChart,
-  DiagnosticSection
-} from '../components/Statistics/StatisticsComponents';
+import CircularProgressCard from '../components/Statistics/CircularProgressCard';
+import  ProgressTab from '../components/Statistics/ProgressTab'
+import WeightProgressChart from '../components/Statistics/WeightProgressChart'
+import DiagnosticSection from '../components/Statistics/DiagnosticSection'
+
 
 const StatistiquesPage = () => {
   const [selectedTab, setSelectedTab] = useState('poids');
@@ -15,11 +14,11 @@ const StatistiquesPage = () => {
   };
 
   return (
-    <Box className="p-4">
+    <Box className="w-full">
       <Typography variant="h5" className="font-bold mb-4">Statistiques</Typography>
       
       {/* Calorie and Objective Cards */}
-      <Box className="flex gap-4 mb-4">
+      <Box className="flex gap-8 mb-4">
         <CircularProgressCard
           title="Votre dépense kcal"
           value={550}
