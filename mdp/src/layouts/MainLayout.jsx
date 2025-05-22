@@ -4,7 +4,7 @@ const MainLayout = ({children}) =>{
     return(
         <main>
             <TabBar/>
-            <div>
+            <div className="px-2.5">
                 {children}
             </div>
         </main>
