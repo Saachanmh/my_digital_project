@@ -15,6 +15,9 @@ function MainRouter () {
             />
             <Route path='/' element={<HomePage />} />
             <Route path='/profile' element={<ProfilePage />} />
+            <Route path='/exercice' element={<ExercicePage/>} />
+            <Route path='/stat' element={<StatistiquesPage/>} />
+            <Route path='/training' element={<TrainingPage/>} />
         </Routes>
     )
 }
