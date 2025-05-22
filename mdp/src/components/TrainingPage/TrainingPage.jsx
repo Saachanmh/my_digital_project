@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import WeeklyCalendar from './WeeklyCalendar';
-import DailyWorkout from './DailyWorkout';
-import CreateWorkoutButton from './CreateWorkoutButton';
+import DailyWorkout from '../DailyWorkout/DailyWorkout';
+import CreateWorkoutButton from '../CreateWorkout/CreateWorkoutButton';
 import WeeklyHistory from './WeeklyHistory';
 import WorkoutSlider from './WorkoutSlider';
 
