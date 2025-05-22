@@ -1,6 +1,6 @@
 // src/components/WeekCalendar.js
 import React, { useState, useEffect } from 'react';
-import './WeekCalendar.css';
+import '../To_Do/To_Do_module.css';
 
 const WeekCalendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
