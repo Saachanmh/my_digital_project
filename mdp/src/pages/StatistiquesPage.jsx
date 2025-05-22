@@ -4,6 +4,7 @@ import CircularProgressCard from '../components/Statistics/CircularProgressCard'
 import  ProgressTab from '../components/Statistics/ProgressTab'
 import WeightProgressChart from '../components/Statistics/WeightProgressChart'
 import DiagnosticSection from '../components/Statistics/DiagnosticSection'
+import MeasurementsSection from '../components/Statistics/MeasurementsSection'
 
 
 const StatistiquesPage = () => {
@@ -12,6 +13,21 @@ const StatistiquesPage = () => {
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
   };
+
+  const tabsContent = {
+    'poids':{
+      title: 'Poids',
+      component: <WeightProgressChart />
+    },
+    'mesure':{
+      title: 'Mensurations',
+      component: <MeasurementsSection />
+    },
+    'avance':{
+      title: 'Statistiques avancées',
+      component: <Typography variant="body1">Contenu à venir</Typography>
+    }
+  }
 
   return (
     <Box className="w-full">
@@ -55,12 +71,11 @@ const StatistiquesPage = () => {
       </Box>
       
       {/* Weight Progress Section */}
-      {selectedTab === 'poids' && (
         <>
-          <Typography variant="h6" className="mt-4 mb-2">Poids</Typography>
-          <WeightProgressChart />
+          <Typography variant="h6" className="mt-4 mb-2">{tabsContent[selectedTab]?.title}</Typography>
+          {tabsContent[selectedTab]?.component}
         </>
-      )}
+      
       
       {/* Diagnostic Section */}
       <DiagnosticSection />
