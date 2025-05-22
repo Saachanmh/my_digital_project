@@ -1,10 +1,10 @@
-import { Routes, Route, Navigate } from 'react-router'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import HomePage from '../pages/HomePage'
 import ProfilePage from '../pages/ProfilePage'
 import ExercicePage from '../pages/ExercicePage.jsx'
 import StatistiquesPage from '../pages/StatistiquesPage.jsx'
 import TrainingPage from '../pages/TrainingPage.jsx'
-
+import WorkoutSessionPage from '../pages/WorkoutSessionPage.jsx'
 
 function MainRouter () {
     return (
@@ -18,6 +18,7 @@ function MainRouter () {
             <Route path='/exercice' element={<ExercicePage/>} />
             <Route path='/stat' element={<StatistiquesPage/>} />
             <Route path='/training' element={<TrainingPage/>} />
+            <Route path='/workout-session' element={<WorkoutSessionPage/>} />
         </Routes>
     )
 }
