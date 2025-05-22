@@ -34,7 +34,7 @@ const StatistiquesPage = () => {
       <Typography variant="h5" className="font-bold mb-4">Statistiques</Typography>
       
       {/* Calorie and Objective Cards */}
-      <Box className="flex gap-8 mb-4">
+      <Box className="flex gap-8 mb-10">
         <CircularProgressCard
           title="Votre dépense kcal"
           value={550}
@@ -52,18 +52,23 @@ const StatistiquesPage = () => {
       </Box>
       
       {/* Tabs */}
-      <Box className="flex gap-2 mb-4">
+      <Box className="flex gap-1 mb-4 justify-evenly">
         <ProgressTab 
+          className="flex-1"
           label="Poids" 
           selected={selectedTab === 'poids'} 
           onClick={() => handleTabChange('poids')} 
         />
         <ProgressTab 
+          className="flex-1"
+
           label="Mesure" 
           selected={selectedTab === 'mesure'} 
           onClick={() => handleTabChange('mesure')} 
         />
         <ProgressTab 
+          className="flex-1"
+
           label="Avance" 
           selected={selectedTab === 'avance'} 
           onClick={() => handleTabChange('avance')} 

@@ -32,12 +32,11 @@ const MeasurementsSection = () => {
                 <Typography className="w-24 mr-2">Épaules</Typography>
                 <TextField
                     className='w-20'
-
-                  variant="outlined"
-                  value={measurements.epaules}
-                  onChange={handleChange('epaules')}
-                  InputProps={{ endAdornment: <Typography>cm</Typography> }}
-                  size="small"
+                    variant="outlined"
+                    value={measurements.epaules}
+                    onChange={handleChange('epaules')}
+                    InputProps={{ endAdornment: <Typography>cm</Typography> }}
+                    size="small"
                 />
               </Box>
               
