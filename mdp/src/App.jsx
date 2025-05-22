@@ -1,14 +1,15 @@
 import React from "react";
 import TabBar from "./components/Tabbar/Tabbar.jsx";
 import { Button } from "@mui/material";
+import MainRouter from "./Router/MainRouter.jsx";
+import MainLayout from "./layouts/MainLayout.jsx";
 
 function App() {
   return (
-    <div className="App">
-      <h1 className="bg-red-500">Mon Application</h1>
-      <TabBar />
-      <Button>hello button</Button>
-    </div>
+    <MainLayout>
+
+      <MainRouter/>
+    </MainLayout>
   );
 }
 

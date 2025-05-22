@@ -1,3 +1,5 @@
-const profilePage
+const profilePage=()=>{
+    return
+}
 
 export default profilePage

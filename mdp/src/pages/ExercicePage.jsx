@@ -1,3 +1,5 @@
-const exercicePage
+const exercicePage=()=>{
+    return
+}
 
 export default exercicePage
