@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -21,9 +21,8 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle registration
     console.log('Registration with:', formData);
-    navigate('/user-info'); // Navigate to user info page
+    navigate('/user-info');
   };
 
   const togglePasswordVisibility = () => {
@@ -31,13 +30,12 @@ const SignupPage = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
   return (
     <div className="p-6 bg-white min-h-screen flex flex-col">
-      {/* Back button */}
-      <button 
+      <button
         onClick={handleGoBack}
         className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-4"
       >
@@ -49,7 +47,7 @@ const SignupPage = () => {
       <h1 className="text-2xl font-bold mb-2">Créer un compte</h1>
       <p className="text-gray-700 mb-6">Entrez vos informations</p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-grow">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="mb-2">
           <input
             type="text"
@@ -62,31 +60,26 @@ const SignupPage = () => {
           />
         </div>
 
-        <div className="mb-2 relative">
-          <input
-            type="text"
-            name="birthDate"
-            value={formData.birthDate}
-            onChange={handleChange}
-            placeholder="Date de naissance"
-            className="w-full p-4 bg-gray-200 rounded-lg pr-12"
-            required
-          />
-          <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </span>
-        </div>
-
         <div className="mb-2">
           <input
             type="text"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            placeholder="Prénom"
+            placeholder="Nom"
             className="w-full p-4 bg-gray-200 rounded-lg"
+            required
+          />
+        </div>
+
+        <div className="mb-2 relative">
+          <input
+            type="text"
+            name="birthDate"
+            value={formData.birthDate}
+            onChange={handleChange}
+            placeholder="Date de naissance JJ/MM/AAAA"
+            className="w-full p-4 bg-gray-200 rounded-lg pr-12"
             required
           />
         </div>
@@ -101,8 +94,8 @@ const SignupPage = () => {
             className="w-full p-4 bg-gray-200 rounded-lg pr-12"
             required
           />
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={togglePasswordVisibility}
             className="absolute right-4 top-1/2 transform -translate-y-1/2"
           >
@@ -119,11 +112,11 @@ const SignupPage = () => {
           </button>
         </div>
 
-        <button 
-          type="submit" 
-          className="w-full p-4 bg-gray-200 rounded-lg text-gray-700 font-medium mt-auto"
+        <button
+          type="submit"
+          className="w-full p-4 bg-gray-200 rounded-lg text-gray-700 font-medium"
         >
-          S'inscrire
+          Suivant
         </button>
       </form>
     </div>

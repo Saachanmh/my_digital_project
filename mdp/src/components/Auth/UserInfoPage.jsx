@@ -20,9 +20,8 @@ const UserInfoPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically save user info
     console.log('User info saved:', formData);
-    navigate('/'); // Navigate to home page after completion
+    navigate('/');
   };
 
   return (
@@ -30,7 +29,7 @@ const UserInfoPage = () => {
       <h1 className="text-2xl font-bold mb-2">Remplissez les</h1>
       <h1 className="text-2xl font-bold mb-6">informations ci-dessous :</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 flex-grow">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="mb-2">
           <label className="block text-gray-700 mb-2">Sexe</label>
           <select
@@ -100,9 +99,9 @@ const UserInfoPage = () => {
           </select>
         </div>
 
-        <button 
-          type="submit" 
-          className="w-full p-4 bg-gray-200 rounded-lg text-gray-700 font-medium mt-auto"
+        <button
+          type="submit"
+          className="w-full p-4 bg-gray-200 rounded-lg text-gray-700 font-medium"
         >
           Suivant
         </button>
