@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import HomePage from '../pages/HomePage'
 import ProfilePage from '../pages/ProfilePage'
 import ExercicePage from '../pages/ExercicePage.jsx'
 import StatistiquesPage from '../pages/StatistiquesPage.jsx'
@@ -16,11 +15,10 @@ function MainRouter () {
                 path='*'
                 element={<Navigate to='/' replace />}
             />
-            <Route path='/' element={<HomePage />} />
+            <Route path='/' element={<TrainingPage />} />
             <Route path='/profile' element={<ProfilePage />} />
             <Route path='/exercice' element={<ExercicePage/>} />
             <Route path='/stat' element={<StatistiquesPage/>} />
-            <Route path='/training' element={<TrainingPage/>} />
             <Route path='/workout-session' element={<WorkoutSessionPage/>} />
             <Route path='/workout-timer' element={<WorkoutTimerPage/>} />
             <Route path='/edit-exercise/:id' element={<EditExercisePage/>} />
