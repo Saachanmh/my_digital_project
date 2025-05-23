@@ -5,6 +5,9 @@ import ExercicePage from '../pages/ExercicePage.jsx'
 import StatistiquesPage from '../pages/StatistiquesPage.jsx'
 import TrainingPage from '../pages/TrainingPage.jsx'
 import WorkoutSessionPage from '../pages/WorkoutSessionPage.jsx'
+import WorkoutTimerPage from '../pages/WorkoutTimerPage.jsx'
+import EditExercisePage from '../pages/EditExercisePage.jsx'
+import CreateExercisePage from '../pages/CreateExercisePage.jsx'
 
 function MainRouter () {
     return (
@@ -19,6 +22,9 @@ function MainRouter () {
             <Route path='/stat' element={<StatistiquesPage/>} />
             <Route path='/training' element={<TrainingPage/>} />
             <Route path='/workout-session' element={<WorkoutSessionPage/>} />
+            <Route path='/workout-timer' element={<WorkoutTimerPage/>} />
+            <Route path='/edit-exercise/:id' element={<EditExercisePage/>} />
+            <Route path='/create-exercise' element={<CreateExercisePage/>} />
         </Routes>
     )
 }

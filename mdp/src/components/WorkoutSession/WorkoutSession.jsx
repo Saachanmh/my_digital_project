@@ -26,22 +26,41 @@ const WorkoutSession = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Go back to previous page
+    navigate('/training'); // Navigate back to the training page
   };
   
   const handleStartWorkout = () => {
-    // Logic to start the workout
-    alert("Commencer l'entraînement");
+    // Navigate to the workout timer page
+    navigate('/workout-timer');
   };
   
   const handlePostpone = () => {
     // Logic to postpone the workout
-    alert("Reporter à demain");
+    alert("Session reportée à demain");
+  };
+  
+  const handleEditExercise = (exerciseId) => {
+    navigate(`/edit-exercise/${exerciseId}`);
+  };
+  
+  const handleAddExercise = () => {
+    navigate('/create-exercise');
   };
 
   return (
-    <div className="p-4 bg-white min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">{workoutData.title}</h1>
+    <div className="p-4 bg-white min-h-screen relative">
+      {/* Back button in top left corner */}
+      <button 
+        onClick={handleGoBack}
+        className="absolute top-4 left-4 w-10 h-10 flex items-center justify-center"
+        aria-label="Return to training page"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <h1 className="text-2xl font-bold mb-6 text-center pt-2">{workoutData.title}</h1>
       
       {/* Duration and Calories */}
       <div className="flex gap-4 mb-6">
@@ -73,7 +92,10 @@ const WorkoutSession = () => {
               </div>
               
               {/* Three dots menu button */}
-              <button className="text-gray-500 p-1">
+              <button 
+                className="text-gray-500 p-1"
+                onClick={() => handleEditExercise(exercise.id)}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                 </svg>
@@ -83,7 +105,10 @@ const WorkoutSession = () => {
         ))}
         
         {/* Add Exercise Button */}
-        <button className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl mb-4">
+        <button 
+          className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl mb-4"
+          onClick={handleAddExercise}
+        >
           Ajouter un exercice
         </button>
       </div>
@@ -99,12 +124,11 @@ const WorkoutSession = () => {
         <button 
           onClick={handlePostpone}
           className="bg-gray-200 text-gray-800 py-3 rounded-xl font-medium"
-          alert="Session reportée à demain"
         >
           Reporter à demain
         </button>
       </div>
-          </div>
+    </div>
   );
 };
 
