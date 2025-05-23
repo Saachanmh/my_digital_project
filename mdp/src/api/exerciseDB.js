@@ -18,7 +18,13 @@ const getExosByBodyPart = async (bodyPart) => {
     return response.data
 }
 
+const getExosById = async (id) => {
+    const response = await api.get('/exercises/exercise/'+id)
+    return response.data
+}
+
 export {
     getAllExos,
-    getExosByBodyPart
+    getExosByBodyPart,
+    getExosById
 }
