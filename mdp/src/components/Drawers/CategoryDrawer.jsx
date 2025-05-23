@@ -1,60 +1,8 @@
 import React from 'react';
-import { Drawer } from '@mui/material';
+import { Drawer, CircularProgress } from '@mui/material';
 import ExoCard from '../Cards/ExoCard';
 
-const CategoryDrawer = ({ category, open, onClose }) => {
-
-  const data = [{
-    bodyPart:"back",
-    equipment:"cable",
-    gifUrl:"https://v2.exercisedb.io/image/-NR4Wo2F592SoH",
-    id:"0007",
-    name:"alternate lateral pulldown",
-    target:"lats",
-    secondaryMuscles:'',
-    instructions:'',
-    },
-    {
-      bodyPart:"back",
-      equipment:"cable",
-      gifUrl:"https://v2.exercisedb.io/image/-NR4Wo2F592SoH",
-      id:"0007",
-      name:"machin truc",
-      target:"lats",
-      secondaryMuscles:'',
-      instructions:'',
-      },
-      {
-        bodyPart:"back",
-        equipment:"cable",
-        gifUrl:"https://v2.exercisedb.io/image/-NR4Wo2F592SoH",
-        id:"0007",
-        name:"machin bidule",
-        target:"lats",
-        secondaryMuscles:'',
-        instructions:'',
-        },
-        {
-          bodyPart:"back",
-          equipment:"cable",
-          gifUrl:"https://v2.exercisedb.io/image/-NR4Wo2F592SoH",
-          id:"0007",
-          name:"machin truc",
-          target:"lats",
-          secondaryMuscles:'',
-          instructions:'',
-          },
-          {
-            bodyPart:"back",
-            equipment:"cable",
-            gifUrl:"https://v2.exercisedb.io/image/-NR4Wo2F592SoH",
-            id:"0007",
-            name:"machin bidule",
-            target:"lats",
-            secondaryMuscles:'',
-            instructions:'',
-            }
-  ]
+const CategoryDrawer = ({ category, exercises = [], loading = false, open, onClose }) => {
 
   return (
     <Drawer
@@ -73,18 +21,26 @@ const CategoryDrawer = ({ category, open, onClose }) => {
       </div>
       <div className="overflow-y-auto">
         <p>Liste des exercices pour {category.name}</p>
-        {/* Exercise list would go here */}
-        <div className='grid grid-cols-2 gap-2.5'>
-          {data.map((exo)=>{
-            return (
+        
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <CircularProgress />
+          </div>
+        ) : exercises.length > 0 ? (
+          <div className='grid grid-cols-2 gap-2.5'>
+            {exercises.map((exo) => (
               <ExoCard
                 className="rounded-3xl bg-gray-200 p-2.5 w-full flex flex-col items-center"
                 key={exo.id}
                 exo={exo}
               />
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center p-4">
+            <p>Aucun exercice trouvé pour cette catégorie</p>
+          </div>
+        )}
       </div>
     </Drawer>
   );

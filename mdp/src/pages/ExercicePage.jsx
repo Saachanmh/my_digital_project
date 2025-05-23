@@ -3,32 +3,45 @@ import { TextField, InputAdornment, Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import TabBar from '../components/Tabbar/Tabbar';
 import CategoryDrawer from '../components/Drawers/CategoryDrawer';
-import { getAllExos } from '../api/exerciseDB';
+import { getAllExos, getExosByBodyPart } from '../api/exerciseDB';
 
 const ExercicePage = () => {
     
   const [openDrawer, setOpenDrawer] = useState(null);
-  const [category,setCategory] = useState({
+  const [category, setCategory] = useState({
     name:'',
     id:''
-  })
+  });
+  const [exercises, setExercises] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const exerciseCategories = [
     { id: 'fessier', name: 'Fessier' },
-    { id: 'abdos', name: 'Abdos' },
-    { id: 'jambes', name: 'Jambes' },
-    { id: 'epaules', name: 'Epaules' },
-    { id: 'pecs', name: 'Pecs' },
-    { id: 'bras', name: 'Bras' },
-    { id: 'dos', name: 'Dos' },
+    { id: 'waist', name: 'Abdos' },
+    { id: 'upper legs', name: 'Jambes' },
+    { id: 'shoulders', name: 'Epaules' },
+    { id: 'chest', name: 'Pecs' },
+    { id: 'upper arms', name: 'Bras' },
+    { id: 'back', name: 'Dos' },
     { id: 'cardio', name: 'Cardio' },
     { id: 'etirement', name: 'Etirement' },
   ];
 
 
-  const handleDrawerOpen = (category) => {
-    setCategory({...category})
+  const handleDrawerOpen = async (category) => {
+    setCategory({...category});
     setOpenDrawer(category.id);
+    setLoading(true);
+    
+    try {
+      const exercisesData = await getExosByBodyPart(category.id);
+      setExercises(exercisesData);
+    } catch (error) {
+      console.error('Error fetching exercises:', error);
+      setExercises([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDrawerClose = () => {
@@ -98,6 +111,8 @@ const ExercicePage = () => {
         <CategoryDrawer
             key={category.id}
             category={category}
+            exercises={exercises}
+            loading={loading}
             open={openDrawer === category.id}
             onClose={handleDrawerClose}
         />
