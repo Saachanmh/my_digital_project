@@ -8,6 +8,7 @@ import WorkoutSessionPage from '../pages/WorkoutSessionPage.jsx'
 import WorkoutTimerPage from '../pages/WorkoutTimerPage.jsx'
 import EditExercisePage from '../pages/EditExercisePage.jsx'
 import CreateExercisePage from '../pages/CreateExercisePage.jsx'
+import ExerciseDetailPage from '../pages/ExerciseDetailPage.jsx'
 
 function MainRouter () {
     return (
@@ -25,6 +26,7 @@ function MainRouter () {
             <Route path='/workout-timer' element={<WorkoutTimerPage/>} />
             <Route path='/edit-exercise/:id' element={<EditExercisePage/>} />
             <Route path='/create-exercise' element={<CreateExercisePage/>} />
+            <Route path='/exercise/:id' element={<ExerciseDetailPage/>} />
         </Routes>
     )
 }
