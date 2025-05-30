@@ -4,7 +4,6 @@ const CircularProgressCard = ({ title, value, maxValue, percentage, description 
   return (
     <Card variant="outlined" className="flex-1 !rounded-3xl">
       <CardContent className="relative">
-        <Typography className="text-lg">{title}</Typography>
         <Typography className="text-[10px] mb-4" variant="body2">
           {description}
         </Typography>
