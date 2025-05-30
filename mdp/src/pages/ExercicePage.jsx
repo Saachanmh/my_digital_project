@@ -16,15 +16,15 @@ const ExercicePage = () => {
   const [loading, setLoading] = useState(false);
 
   const exerciseCategories = [
-    { id: 'fessier', name: 'Fessier' },
-    { id: 'waist', name: 'Abdos' },
-    { id: 'upper legs', name: 'Jambes' },
-    { id: 'shoulders', name: 'Epaules' },
-    { id: 'chest', name: 'Pecs' },
-    { id: 'upper arms', name: 'Bras' },
-    { id: 'back', name: 'Dos' },
-    { id: 'cardio', name: 'Cardio' },
-    { id: 'etirement', name: 'Etirement' },
+    { id: 'fessier', name: 'Fessier' ,color:"yellow",gridArea: "1 / 1 / 3 / 3"},
+    { id: 'waist', name: 'Abdos' ,color:"purple", gridArea:"1 / 3 / 3 / 5"},
+    { id: 'upper legs', name: 'Jambes' ,color:"pinkish", gridArea:"1 / 5 / 4 / 7"},
+    { id: 'shoulders', name: 'Epaules' ,color:"pinkish", gridArea:"3 / 1 / 5 / 3"},
+    { id: 'chest', name: 'Pecs' ,color:"yellow", gridArea:"3 / 3 / 5 / 5"},
+    { id: 'upper arms', name: 'Bras' ,color:"purple", gridArea:"5 / 1 / 6 / 5"},
+    { id: 'back', name: 'Dos' ,color:"purple", gridArea:"4 / 5 / 6 / 7"},
+    { id: 'cardio', name: 'Cardio' ,color:"yellow", gridArea:"6 / 1 / 9 / 4"},
+    { id: 'etirement', name: 'Etirement' ,color:"pinkish", gridArea:"6 / 4 / 9 / 7"},
   ];
 
 
@@ -51,7 +51,7 @@ const ExercicePage = () => {
   return (
     <div className="p-4 pb-16 relative min-h-screen bg-white">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Exercices</h1>
+        <h1 className="text-2xl font-display">Exercices</h1>
         <button className="text-gray-600 text-sm">Voir tout</button>
       </div>
 
@@ -74,10 +74,12 @@ const ExercicePage = () => {
       </div>
 
       {/* Exercise Categories Grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div 
+        style={{gridTemplateColumns:'repeat(6, 1fr)', gridTemplateRows:'repeat(8, 1fr)'}}
+        className="grid gap-2">
         {exerciseCategories.map((category) => {
           // Special layout for wider items
-          let className = 'bg-gray-200 rounded-xl flex items-center justify-center p-4 h-24';
+          let className = `bg-${category.color} rounded-xl flex items-center justify-center p-4`;
           
           if (category.id === 'bras' || category.id === 'dos') {
             className += ' col-span-2';
@@ -87,9 +89,10 @@ const ExercicePage = () => {
             <div
               key={category.id}
               className={className}
+              style={{gridArea:category.gridArea}}
               onClick={() => handleDrawerOpen(category)}
             >
-              <span className="font-medium">{category.name}</span>
+              <span className="font-bold font-display text-white text-xl">{category.name}</span>
             </div>
           );
         })}
@@ -97,14 +100,11 @@ const ExercicePage = () => {
 
       {/* Create New Exercise Button */}
       <div className="mt-6">
-        <Button
-          variant="contained"
-          fullWidth
-          className="bg-gray-200 text-black hover:bg-gray-300 normal-case rounded-xl py-3"
-          sx={{ boxShadow: 'none' }}
+        <button
+          className="bg-dark text-white hover:bg-gray-300 normal-case rounded-2xl py-8 w-full"
         >
           Créer un nouvel exercice
-        </Button>
+        </button>
       </div>
 
         {/* Drawer for each category */}

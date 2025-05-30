@@ -91,13 +91,13 @@ const WeeklyCalendar = () => {
 
   return (
     <div className="p-4">
-      <h2 className="mb-4 text-2xl font-medium">Entrainements</h2>
+      <h2 className="mb-4 text-2xl font-medium font-display">Entrainements</h2>
 
       {/* Calendar days with navigation */}
       <div className="flex items-center justify-between mb-5">
         
         {/* Days display */}
-        <div className="flex justify-between flex-1 px-2">
+        <div className="flex justify-between flex-1 px-2 z-10">
           {displayDays.map((day, index) => (
             <div 
               key={index} 
@@ -109,7 +109,7 @@ const WeeklyCalendar = () => {
             >
               <div className="text-base text-gray-800 mb-1">{day.dayName}</div>
               <div className={`w-10 h-10 flex items-center justify-center text-lg ${
-                day.isToday ? 'bg-gray-300 rounded-full' : 
+                day.isToday ? 'bg-purple text-white rounded-full' : 
                 day.isCenter ? 'bg-gray-200 rounded-full' : ''
               }`}>
                 {day.date}
@@ -120,31 +120,31 @@ const WeeklyCalendar = () => {
       </div>
 
       {/* Daily Workout Card with navigation controls at the top */}
-      <div className="bg-gray-200 rounded-2xl p-5 flex justify-between items-center mb-5 relative overflow-hidden -mt-4">
+      <div className="bg-dark text-white rounded-2xl p-5 flex justify-between items-center mb-5 relative overflow-hidden -mt-4 shadow-normal">
         {/* Top curve cutout */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-8 bg-white rounded-b-full"></div>
+        <svg className='absolute top-0 left-1/2 transform -translate-x-1/2' width="62" height="14" viewBox="0 0 62 14" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M31.5 14C18 14 12 0 0 0H62C50 0 45 14 31.5 14Z"/>
+        </svg>
        
 
         <div className="mt-2 w-full">
           <h3 className="text-lg font-medium mb-2">{currentWorkout.title}</h3>
-          <p className="text-base text-gray-700">{currentWorkout.exercises}</p>
+          <p className="text-base">{currentWorkout.exercises}</p>
+          <button
+            onClick={handleSessionButtonClick}
+            className="p-2 bg-yellow rounded-xl cursor-pointer hover:bg-gray-100 active:bg-gray-200 text-dark"
+            aria-label="Go to session"
+          >
+            Commencer
+          </button>
         </div>
 
         {/* Separate div for the duration circle */}
         <div className="absolute" style={{ top: '10px', right: '20px' }}>
-          <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center">
-            <span className="text-gray-400 text-sm">1h30</span>
+          <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center text-sm text-dark font-display font-bold">
+            <span>1h30</span>
           </div>
         </div>
-
-        {/* Bottom right button/indicator */}
-        <button
-          onClick={handleSessionButtonClick}
-          className="absolute bottom-4 right-4 bg-white rounded-xl w-12 h-8 cursor-pointer hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center transition-colors shadow-sm"
-          aria-label="Go to session"
-        >
-          <span className="text-gray-500">→</span>
-        </button>
       </div>
     </div>
   );
