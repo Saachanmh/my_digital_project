@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CreateWorkoutButton = () => {
+const CreateWorkoutButton = ({onClick}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
