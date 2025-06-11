@@ -60,35 +60,35 @@ const WorkoutSession = () => {
         </svg>
       </button>
       
-      <h1 className="text-2xl font-bold mb-6 text-center pt-2">{workoutData.title}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center pt-2 font-display">{workoutData.title}</h1>
       
       {/* Duration and Calories */}
       <div className="flex gap-4 mb-6">
-        <div className="bg-gray-100 rounded-full px-4 py-2 flex items-center justify-center">
-          <span className="text-gray-600">{workoutData.duration}</span>
+        <div className="bg-purple rounded-full px-4 py-2 flex items-center justify-center">
+          <span className="text-white">{workoutData.duration}</span>
         </div>
-        <div className="bg-gray-100 rounded-full px-4 py-2 flex items-center justify-center">
-          <span className="text-gray-600">{workoutData.calories}</span>
+        <div className="bg-pinkish rounded-full px-4 py-2 flex items-center justify-center">
+          <span className="text-white">{workoutData.calories}</span>
         </div>
       </div>
       
       {/* Exercises Section */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-4">Exercices</h2>
+        <h2 className="text-xl mb-4 font-display font-bold">Exercices</h2>
         
         {workoutData.exercises.map((exercise) => (
-          <div key={exercise.id} className="bg-gray-100 rounded-xl p-4 mb-4 relative">
+          <div key={exercise.id} className="bg-yellow rounded-xl p-4 mb-4 relative">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="font-medium mb-2">{exercise.name}</h3>
+                <h3 className="font-display mb-2">{exercise.name}</h3>
                 <div className="flex gap-2 mb-2">
                   {exercise.muscles.map((muscle, index) => (
-                    <span key={index} className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+                    <span key={index} className="bg-dark text-white text-xs px-2 py-1 rounded-full">
                       {muscle}
                     </span>
                   ))}
                 </div>
-                <p className="text-sm text-gray-600">{exercise.sets}</p>
+                <p className="text-sm text-dark">{exercise.sets}</p>
               </div>
               
               {/* Three dots menu button */}
@@ -96,7 +96,7 @@ const WorkoutSession = () => {
                 className="text-gray-500 p-1"
                 onClick={() => handleEditExercise(exercise.id)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                 </svg>
               </button>
@@ -106,7 +106,7 @@ const WorkoutSession = () => {
         
         {/* Add Exercise Button */}
         <button 
-          className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl mb-4"
+          className="w-full bg-purple text-white py-3 rounded-xl mb-4"
           onClick={handleAddExercise}
         >
           Ajouter un exercice
@@ -117,15 +117,15 @@ const WorkoutSession = () => {
       <div className="grid grid-cols-3 gap-4 mt-8">
         <button 
           onClick={handleStartWorkout}
-          className="col-span-2 bg-gray-200 text-gray-800 py-3 rounded-xl font-medium"
+          className="col-span-2 bg-dark text-white py-3 rounded-xl font-display"
         >
           Commencer
         </button>
         <button 
           onClick={handlePostpone}
-          className="bg-gray-200 text-gray-800 py-3 rounded-xl font-medium"
+          className="bg-pinkish text-pinkish-800 py-3 rounded-xl font-display"
         >
-          Reporter à demain
+          Mettre à demain
         </button>
       </div>
     </div>
