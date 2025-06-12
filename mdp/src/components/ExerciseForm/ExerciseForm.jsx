@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   const navigate = useNavigate();
-  
+
   // Default values for a new exercise
   const defaultExercise = {
     name: '',
@@ -12,10 +12,10 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
     restTime: 120,
     comments: ''
   };
-  
+
   // Use initial exercise data if in edit mode, otherwise use defaults
   const [exercise, setExercise] = useState(isEditMode ? initialExercise : defaultExercise);
-  
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
     console.log('Exercise saved:', exercise);
     navigate('/workout-session');
   };
-  
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +32,17 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
       [name]: value
     }));
   };
-  
+
+  // Handle set input changes
+  const handleSetInputChange = (index, field, value) => {
+    const newSets = [...exercise.sets];
+    newSets[index][field] = value;
+    setExercise(prev => ({
+      ...prev,
+      sets: newSets
+    }));
+  };
+
   // Handle rest time changes
   const handleRestTimeChange = (change) => {
     setExercise(prev => ({
@@ -40,7 +50,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
       restTime: Math.max(0, prev.restTime + change)
     }));
   };
-  
+
   // Handle adding a new set
   const handleAddSet = () => {
     setExercise(prev => ({
@@ -48,7 +58,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
       sets: [...prev.sets, { reps: '', weight: '' }]
     }));
   };
-  
+
   // Handle going back
   const handleGoBack = () => {
     navigate('/workout-session');
@@ -59,7 +69,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
       <h1 className="text-2xl font-bold mb-6">
         {isEditMode ? 'Modifier exercice' : 'Créer exercice'}
       </h1>
-      
+
       <form onSubmit={handleSubmit}>
         {/* Exercise Name */}
         <div className="mb-6">
@@ -83,35 +93,35 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             </div>
           )}
         </div>
-        
+
         {/* Sets and Reps */}
         <div className="mb-6">
           <h2 className="text-base font-medium mb-4">Masse et répétition</h2>
-          
+
           <div className="grid grid-cols-4 gap-2 mb-2">
             {exercise.sets.map((set, index) => (
               <React.Fragment key={index}>
                 <div className="bg-gray-100 rounded-lg p-2 text-center">
                   <input
                     type="text"
-                    value={isEditMode ? '12x' : 'rep.'}
-                    readOnly={isEditMode}
+                    value={set.reps}
+                    onChange={(e) => handleSetInputChange(index, 'reps', e.target.value)}
                     className="w-full bg-transparent text-center"
+                    placeholder="reps"
                   />
                 </div>
-                {index < 3 && (
-                  <div className="bg-gray-100 rounded-lg p-2 text-center">
-                    <input
-                      type="text"
-                      value={isEditMode ? '40kg' : 'poids'}
-                      readOnly={isEditMode}
-                      className="w-full bg-transparent text-center"
-                    />
-                  </div>
-                )}
+                <div className="bg-gray-100 rounded-lg p-2 text-center">
+                  <input
+                    type="text"
+                    value={set.weight}
+                    onChange={(e) => handleSetInputChange(index, 'weight', e.target.value)}
+                    className="w-full bg-transparent text-center"
+                    placeholder="weight"
+                  />
+                </div>
               </React.Fragment>
             ))}
-            
+
             {/* Add set button */}
             <div className="bg-white border border-gray-200 rounded-lg p-2 flex items-center justify-center">
               <button
@@ -124,11 +134,11 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             </div>
           </div>
         </div>
-        
+
         {/* Rest Time */}
         <div className="mb-6">
           <h2 className="text-base font-medium mb-2">Temps de repos par série</h2>
-          
+
           <div className="bg-gray-200 rounded-lg p-2 flex items-center justify-between">
             <button
               type="button"
@@ -137,32 +147,32 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             >
               −
             </button>
-            
+
             <span>{exercise.restTime} s</span>
-            
+
             <button
               type="button"
-              onClick={() => handleRestTimeChange(10)}
+              onClick={() => handleRestTimeChange(1)}
               className="w-8 h-8 flex items-center justify-center"
             >
               +
             </button>
           </div>
         </div>
-        
+
         {/* Comments */}
         <div className="mb-10">
           <h2 className="text-base font-medium mb-2">Commentaire{isEditMode ? 's' : ''}</h2>
-          
+
           <textarea
             name="comments"
-            value={isEditMode ? 'super description de cet exo de ouf\nj\'adore suer et transpirer en homme musculeux' : ''}
+            value={exercise.comments}
             onChange={handleInputChange}
             placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies venenatis, lectus leo sodales odio..."
             className="w-full h-32 p-3 bg-gray-100 rounded-lg resize-none"
           ></textarea>
         </div>
-        
+
         {/* Navigation Dots */}
         <div className="flex justify-center gap-4 mb-6">
           <div className="w-6 h-6 bg-black rounded-full"></div>
@@ -170,7 +180,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
           <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
           <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
         </div>
-        
+
         {/* Submit Button */}
         <button
           type="submit"
