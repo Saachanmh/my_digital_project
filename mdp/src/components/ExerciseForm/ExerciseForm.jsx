@@ -15,11 +15,11 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
 
   // Use initial exercise data if in edit mode, otherwise use defaults
   const [exercise, setExercise] = useState(isEditMode ? initialExercise : defaultExercise);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically save the exercise data to your state/database
     console.log('Exercise saved:', exercise);
     navigate('/workout-session');
   };
@@ -43,12 +43,22 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
     }));
   };
 
-  // Handle rest time changes
+  // Handle rest time changes with debouncing
   const handleRestTimeChange = (change) => {
-    setExercise(prev => ({
-      ...prev,
-      restTime: Math.max(0, prev.restTime + change)
-    }));
+    if (isButtonDisabled) return;
+
+    setExercise(prev => {
+      const newRestTime = prev.restTime + change;
+      return {
+        ...prev,
+        restTime: newRestTime < 0 ? 0 : newRestTime
+      };
+    });
+
+    setIsButtonDisabled(true);
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 500); // Disable buttons for 500ms
   };
 
   // Handle adding a new set
@@ -121,7 +131,6 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
                 </div>
               </React.Fragment>
             ))}
-
             {/* Add set button */}
             <div className="bg-white border border-gray-200 rounded-lg p-2 flex items-center justify-center">
               <button
@@ -144,6 +153,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
               type="button"
               onClick={() => handleRestTimeChange(-10)}
               className="w-8 h-8 flex items-center justify-center"
+              disabled={isButtonDisabled}
             >
               −
             </button>
@@ -152,8 +162,9 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
 
             <button
               type="button"
-              onClick={() => handleRestTimeChange(1)}
+              onClick={() => handleRestTimeChange(10)}
               className="w-8 h-8 flex items-center justify-center"
+              disabled={isButtonDisabled}
             >
               +
             </button>
