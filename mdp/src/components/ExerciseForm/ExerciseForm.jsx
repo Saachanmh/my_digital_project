@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useStorageContext } from '../../services/StorageContext';
+import { createExercise } from '../../services/models';
 
 const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { addExercise, updateExercise, getExerciseById } = useStorageContext();
+  
+  // Récupérer le sessionId depuis les paramètres de l'URL
+  const searchParams = new URLSearchParams(location.search);
+  const sessionId = searchParams.get('sessionId');
 
   // Default values for a new exercise
   const defaultExercise = {
@@ -10,18 +18,78 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
     muscles: ['muscle1'],
     sets: [{ reps: '', weight: '' }],
     restTime: 120,
-    comments: ''
+    comments: '',
+    sessionId: sessionId // Ajouter le sessionId à l'exercice
   };
 
   // Use initial exercise data if in edit mode, otherwise use defaults
   const [exercise, setExercise] = useState(isEditMode ? initialExercise : defaultExercise);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  
+  // Charger les données de l'exercice si on est en mode édition
+  useEffect(() => {
+    if (isEditMode && initialExercise?.id) {
+      const loadExercise = async () => {
+        try {
+          const exerciseData = await getExerciseById(initialExercise.id);
+          if (exerciseData) {
+            setExercise(exerciseData);
+          }
+        } catch (err) {
+          console.error('Erreur lors du chargement de l\'exercice:', err);
+        }
+      };
+      
+      loadExercise();
+    }
+  }, [isEditMode, initialExercise, getExerciseById]);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Exercise saved:', exercise);
-    navigate('/workout-session');
+    
+    try {
+      // Valider les données du formulaire
+      if (!exercise.name.trim()) {
+        alert('Veuillez entrer un nom pour l\'exercice');
+        return;
+      }
+      
+      // Valider les séries
+      const validSets = exercise.sets.filter(set => set.reps && set.weight);
+      if (validSets.length === 0) {
+        alert('Veuillez ajouter au moins une série avec répétitions et poids');
+        return;
+      }
+      
+      // Créer un nouvel exercice ou mettre à jour l'existant
+      if (isEditMode) {
+        await updateExercise(exercise);
+        console.log('Exercice mis à jour:', exercise);
+      } else {
+        // Créer un nouvel exercice avec un ID unique
+        const newExercise = createExercise(
+          exercise.name,
+          sessionId, // S'assurer que le sessionId est bien défini
+          exercise.muscles,
+          exercise.sets,
+          exercise.comments,
+          ''
+        );
+        
+        await addExercise(newExercise);
+        console.log('Nouvel exercice ajouté:', newExercise);
+      }
+      
+      // Rediriger vers la page de séance avec le bon ID
+      if (sessionId) {
+        navigate(`/workout-session/${sessionId}`);
+      } else {
+        navigate('/workout-session');
+      }
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde de l\'exercice:', err);
+      alert('Une erreur est survenue lors de la sauvegarde de l\'exercice');
+    }
   };
 
   // Handle input changes
@@ -71,7 +139,11 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
 
   // Handle going back
   const handleGoBack = () => {
-    navigate('/workout-session');
+    if (sessionId) {
+      navigate(`/workout-session/${sessionId}`);
+    } else {
+      navigate('/workout-session');
+    }
   };
 
   return (
@@ -91,15 +163,22 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
               </span>
             </div>
           ) : (
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="exerciseName" className="mb-2">Nom de l'exercice</label>
+              <input
+                type="text"
+                id="exerciseName"
+                name="name"
+                value={exercise.name}
+                onChange={handleInputChange}
+                placeholder="Ex: Développé couché"
+                className="p-2 border rounded-lg"
+              />
+              <div className="flex items-center mt-2">
+                <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+                  {exercise.muscles[0]}
+                </span>
               </div>
-              <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
-                muscle1
-              </span>
             </div>
           )}
         </div>
@@ -179,26 +258,27 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             name="comments"
             value={exercise.comments}
             onChange={handleInputChange}
-            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies venenatis, lectus leo sodales odio..."
+            placeholder="Ajouter des notes sur l'exercice..."
             className="w-full h-32 p-3 bg-gray-100 rounded-lg resize-none"
           ></textarea>
         </div>
 
-        {/* Navigation Dots */}
-        <div className="flex justify-center gap-4 mb-6">
-          <div className="w-6 h-6 bg-black rounded-full"></div>
-          <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-          <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-          <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+        {/* Navigation Buttons */}
+        <div className="flex gap-4 mb-6">
+          <button
+            type="button"
+            onClick={handleGoBack}
+            className="w-1/3 bg-gray-300 text-gray-700 py-3 rounded-xl font-medium"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            className="w-2/3 bg-purple text-white py-3 rounded-xl font-medium"
+          >
+            Enregistrer
+          </button>
         </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-3 rounded-xl font-medium"
-        >
-          Enregistrer
-        </button>
       </form>
     </div>
   );

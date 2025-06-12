@@ -25,7 +25,9 @@ function MainRouter () {
             <Route path='/stat' element={<StatistiquesPage/>} />
             <Route path='/login' element={<LoginPage/>} />
             <Route path='/workout-session' element={<WorkoutSessionPage/>} />
+            <Route path='/workout-session/:sessionId' element={<WorkoutSessionPage/>} />
             <Route path='/workout-timer' element={<WorkoutTimerPage/>} />
+            <Route path='/workout-timer/:sessionId' element={<WorkoutTimerPage/>} />
             <Route path='/edit-exercise/:id' element={<EditExercisePage/>} />
             <Route path='/create-exercise' element={<CreateExercisePage/>} />
             <Route path='/exercise/:id' element={<ExerciseDetailPage/>} />
@@ -33,8 +35,8 @@ function MainRouter () {
             <Route path='user-info' element={<UserInfoPage/>} />
             <Route path='/new-routine' element={<NewRoutinePage/>} />
             <Route path='/create-workout' element={<CreateWorkoutPage/>} />
+            <Route path='/create-workout/:routineId' element={<CreateWorkoutPage/>} />
             <Route path='/new-routine' element={<NewRoutinePage/>} />
-            <Route path='/create-workout' element={<CreateWorkoutPage/>} />
         </Routes>
     )
 }
