@@ -4,9 +4,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import TabBar from '../components/Tabbar/Tabbar';
 import CategoryDrawer from '../components/Drawers/CategoryDrawer';
 import { getAllExos, getExosByBodyPart } from '../api/exerciseDB';
+import { useNavigate } from 'react-router-dom';
 
 const ExercicePage = () => {
     
+  const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(null);
   const [category, setCategory] = useState({
     name:'',
@@ -87,8 +89,8 @@ const ExercicePage = () => {
 
   // Handle selecting an exercise from search results
   const handleSelectExercise = (exercise) => {
-    // Navigate to exercise detail page
-    window.location.href = `/exercise/${exercise.id}`;
+    // Use React Router's navigate instead of window.location.href
+    navigate(`/exercise/${exercise.id}`);
   };
 
   return (
