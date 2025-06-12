@@ -12,8 +12,6 @@ import SignupPage from '../components/Auth/SignupPage.jsx'
 import UserInfoPage from '../components/Auth/UserInfoPage.jsx'
 import NewRoutinePage from '../pages/NewRoutinePage.jsx'
 import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
-import NewRoutinePage from '../pages/NewRoutinePage.jsx'
-import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
 
 function MainRouter () {
     return (
