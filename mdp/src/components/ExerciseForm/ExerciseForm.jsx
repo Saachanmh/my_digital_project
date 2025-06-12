@@ -7,7 +7,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { addExercise, updateExercise, getExerciseById } = useStorageContext();
-  
+  const [isButtonDisabled,setIsButtonDisabled] = useState()
   // Récupérer le sessionId depuis les paramètres de l'URL
   const searchParams = new URLSearchParams(location.search);
   const sessionId = searchParams.get('sessionId');
