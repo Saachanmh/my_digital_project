@@ -25,7 +25,7 @@ const WorkoutSlider = () => {
 
   return (
     <div className="px-4 mb-5">
-      <h3 className="text-lg font-medium mb-3">Mes entrainements</h3>
+      <h3 className="text-lg mb-3 font-display font-bold">Mes entrainements</h3>
       <div className="flex overflow-x-auto gap-4 pb-2">
         {workouts.map(workout => (
           <div key={workout.id} className="min-w-[250px] bg-gray-100 rounded-xl p-4 flex justify-between items-center">

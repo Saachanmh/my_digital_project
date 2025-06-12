@@ -30,8 +30,8 @@ const StatistiquesPage = () => {
   }
 
   return (
-    <Box className="w-full">
-      <Typography variant="h5" className="font-bold mb-4">Statistiques</Typography>
+    <Box className="w-full p-4 pb-16">
+      <h1 className="font-display text-2xl mb-4">Statistiques</h1>
       
       {/* Calorie and Objective Cards */}
       <Box className="flex gap-8 mb-10">
@@ -76,11 +76,10 @@ const StatistiquesPage = () => {
       </Box>
       
       {/* Weight Progress Section */}
-        <>
-          <Typography variant="h6" className="mt-4 mb-2">{tabsContent[selectedTab]?.title}</Typography>
-          {tabsContent[selectedTab]?.component}
-        </>
-      
+      <div className='mb-4'>
+        {tabsContent[selectedTab]?.component}
+      </div>
+        
       
       {/* Diagnostic Section */}
       <DiagnosticSection />

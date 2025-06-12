@@ -1,1 +1,93 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: Elevon;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../public/fonts/Elevon\ OneG.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Elevon;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../public/fonts/Elevon\ TwoG.woff2") format("woff2");
+}
+
+@theme {
+  --font-display: "Elevon";
+
+  /* colors */
+  --color-dark: #212020;
+  --color-dark-50: #f6f5f5;
+  --color-dark-100: #e7e6e6;
+  --color-dark-200: #d1d0d0;
+  --color-dark-300: #b1afb0;
+  --color-dark-400: #8a8686;
+  --color-dark-500: #6f6b6b;
+  --color-dark-600: #5f5b5b;
+  --color-dark-700: #504e4f;
+  --color-dark-800: #464444;
+  --color-dark-900: #3d3c3c;
+  --color-dark-950: #212020;
+
+  --color-purple: #7d67ab;
+  --color-purple-50: #f7f7fb;
+  --color-purple-100: #f0eff8;
+  --color-purple-200: #e4e2f2;
+  --color-purple-300: #cecae8;
+  --color-purple-400: #b4acd9;
+  --color-purple-500: #9989c9;
+  --color-purple-600: #856fb8;
+  --color-purple-700: #7d67ab;
+  --color-purple-800: #614d8a;
+  --color-purple-900: #514072;
+  --color-purple-950: #33294c;
+
+  --color-pinkish: #e1c6e1;
+  --color-pinkish-50: #f9f6f9;
+  --color-pinkish-100: #f5eef5;
+  --color-pinkish-200: #eddded;
+  --color-pinkish-300: #e1c6e1;
+  --color-pinkish-400: #ca9cc9;
+  --color-pinkish-500: #b77db4;
+  --color-pinkish-600: #a1619a;
+  --color-pinkish-700: #894d81;
+  --color-pinkish-800: #72426b;
+  --color-pinkish-900: #613a5c;
+  --color-pinkish-950: #391e35;
+  
+  --color-pink: #e1c6e1;
+  --color-pink-50: #f9f6f9;
+  --color-pink-100: #f5eef5;
+  --color-pink-200: #eddded;
+  --color-pink-300: #e1c6e1;
+  --color-pink-400: #ca9cc9;
+  --color-pink-500: #b77db4;
+  --color-pink-600: #a1619a;
+  --color-pink-700: #894d81;
+  --color-pink-800: #72426b;
+  --color-pink-900: #613a5c;
+  --color-pink-950: #391e35;
+
+  --color-yellow: #e3e680;
+  --color-yellow-50: #fafbeb;
+  --color-yellow-100: #f1f5cc;
+  --color-yellow-200: #e7ec9c;
+  --color-yellow-300: #e3e680;
+  --color-yellow-400: #d6d439;
+  --color-yellow-500: #c6be2c;
+  --color-yellow-600: #ab9923;
+  --color-yellow-700: #89721f;
+  --color-yellow-800: #725b21;
+  --color-yellow-900: #624c21;
+  --color-yellow-950: #39290f;
+  /* endColors */
+
+  /* shadows */
+  --shadow-normal: 2px 2px 6px rgba(0, 0, 0, 0.25);
+  /* endshadows */
+
+}
