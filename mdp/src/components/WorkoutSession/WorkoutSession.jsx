@@ -1,50 +1,211 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useStorageContext } from '../../services/StorageContext';
+import { createExercise, createSet } from '../../services/models';
 
 const WorkoutSession = () => {
   const navigate = useNavigate();
+  const { sessionId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [session, setSession] = useState(null);
+  const [exercises, setExercises] = useState([]);
   
-  // Mock data for the workout session
-  const workoutData = {
-    title: "Push",
-    duration: "1h30",
-    calories: "560 kcal",
-    exercises: [
-      {
-        id: 1,
-        name: "Nom exercice",
-        muscles: ["muscle1", "muscle1"],
-        sets: "12 x 40kg  12 x 40kg  12 x ..."
-      },
-      {
-        id: 2,
-        name: "Nom exercice",
-        muscles: ["muscle1"],
-        sets: "12 reps  12 reps  12 reps"
-      }
-    ]
-  };
+  // Utiliser le contexte de stockage
+  const { 
+    getSessionById, 
+    getExercisesBySessionId,
+    updateSession,
+    deleteExercise,
+    isInitialized 
+  } = useStorageContext();
+  
+  // Charger les données de la séance
+  useEffect(() => {
+    if (isInitialized) {
+      const loadSessionData = async () => {
+        try {
+          setIsLoading(true);
+          
+          // Si aucun sessionId n'est fourni, utiliser des données par défaut
+          if (!sessionId) {
+            // Utiliser des données par défaut pour la démo
+            setSession({
+              id: 'default',
+              name: "Push",
+              duration: 90,
+              calories: 560,
+              routineId: 'default'
+            });
+            setExercises([
+              {
+                id: 'demo1',
+                name: "Développé couché",
+                muscles: ["Pectoraux", "Triceps"],
+                sets: [
+                  { id: 'd1s1', reps: 12, weight: 40, completed: false },
+                  { id: 'd1s2', reps: 12, weight: 40, completed: false },
+                  { id: 'd1s3', reps: 12, weight: 40, completed: false }
+                ]
+              },
+              {
+                id: 'demo2',
+                name: "Élévations latérales",
+                muscles: ["Épaules"],
+                sets: [
+                  { id: 'd2s1', reps: 12, weight: 10, completed: false },
+                  { id: 'd2s2', reps: 12, weight: 10, completed: false },
+                  { id: 'd2s3', reps: 12, weight: 10, completed: false }
+                ]
+              }
+            ]);
+          } else {
+            // Récupérer la séance depuis la base de données
+            const sessionData = await getSessionById(sessionId);
+            if (!sessionData) {
+              throw new Error('Séance non trouvée');
+            }
+            setSession(sessionData);
+            
+            // Récupérer les exercices de la séance
+            const exercisesData = await getExercisesBySessionId(sessionId);
+            setExercises(exercisesData || []);
+          }
+        } catch (err) {
+          console.error('Erreur lors du chargement de la séance:', err);
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      loadSessionData();
+    }
+  }, [isInitialized, sessionId, getSessionById, getExercisesBySessionId]);
 
   const handleGoBack = () => {
     navigate('/training'); // Navigate back to the training page
   };
   
-  const handleStartWorkout = () => {
-    // Navigate to the workout timer page
-    navigate('/workout-timer');
+  const handleStartWorkout = async () => {
+    if (!session) return;
+    
+    try {
+      // Mettre à jour la séance pour indiquer qu'elle est en cours
+      const updatedSession = {
+        ...session,
+        scheduledDate: new Date().toISOString()
+      };
+      
+      await updateSession(updatedSession);
+      
+      // Navigate to the workout timer page
+      navigate(`/workout-timer/${sessionId}`);
+    } catch (err) {
+      console.error('Erreur lors du démarrage de la séance:', err);
+      alert('Une erreur est survenue lors du démarrage de la séance');
+    }
   };
   
-  const handlePostpone = () => {
-    // Logic to postpone the workout
-    alert("Session reportée à demain");
+  const handlePostpone = async () => {
+    if (!session) return;
+    
+    try {
+      // Calculer la date de demain
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      // Mettre à jour la séance pour la reporter à demain
+      const updatedSession = {
+        ...session,
+        scheduledDate: tomorrow.toISOString()
+      };
+      
+      await updateSession(updatedSession);
+      
+      alert("Session reportée à demain");
+      navigate('/training');
+    } catch (err) {
+      console.error('Erreur lors du report de la séance:', err);
+      alert('Une erreur est survenue lors du report de la séance');
+    }
   };
   
   const handleEditExercise = (exerciseId) => {
-    navigate(`/edit-exercise/${exerciseId}`);
+    navigate(`/edit-exercise/${exerciseId}?sessionId=${sessionId}`);
   };
   
   const handleAddExercise = () => {
-    navigate('/create-exercise');
+    navigate(`/create-exercise?sessionId=${sessionId}`);
+  };
+  
+  const handleDeleteExercise = async (exerciseId) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?')) return;
+    
+    try {
+      await deleteExercise(exerciseId);
+      
+      // Mettre à jour la liste des exercices
+      setExercises(exercises.filter(ex => ex.id !== exerciseId));
+    } catch (err) {
+      console.error('Erreur lors de la suppression de l\'exercice:', err);
+      alert('Une erreur est survenue lors de la suppression de l\'exercice');
+    }
+  };
+
+  // Afficher un message de chargement
+  if (isLoading) {
+    return (
+      <div className="p-4 bg-white min-h-screen flex items-center justify-center">
+        <p>Chargement de la séance...</p>
+      </div>
+    );
+  }
+  
+  // Afficher un message d'erreur
+  if (error) {
+    return (
+      <div className="p-4 bg-white min-h-screen flex flex-col items-center justify-center">
+        <p className="text-red-500 mb-4">{error}</p>
+        <button 
+          onClick={() => navigate('/training')}
+          className="bg-dark text-white py-2 px-4 rounded-xl"
+        >
+          Retour à l'entraînement
+        </button>
+      </div>
+    );
+  }
+  
+  // Afficher un message si la séance n'existe pas
+  if (!session) {
+    return (
+      <div className="p-4 bg-white min-h-screen flex flex-col items-center justify-center">
+        <p className="mb-4">Séance non trouvée</p>
+        <button 
+          onClick={() => navigate('/training')}
+          className="bg-dark text-white py-2 px-4 rounded-xl"
+        >
+          Retour à l'entraînement
+        </button>
+      </div>
+    );
+  }
+
+  // Formater la durée
+  const formatDuration = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h${mins > 0 ? mins : ''}` : `${mins}min`;
+  };
+  
+  // Formater les séries d'un exercice
+  const formatSets = (sets) => {
+    if (!sets || !sets.length) return 'Aucune série';
+    
+    return sets.map((set, index) => {
+      return `${set.reps} x ${set.weight}kg`;
+    }).join('  ');
   };
 
   return (
@@ -60,15 +221,15 @@ const WorkoutSession = () => {
         </svg>
       </button>
       
-      <h1 className="text-2xl font-bold mb-6 text-center pt-2 font-display">{workoutData.title}</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center pt-2 font-display">{session.name}</h1>
       
       {/* Duration and Calories */}
       <div className="flex gap-4 mb-6">
         <div className="bg-purple rounded-full px-4 py-2 flex items-center justify-center">
-          <span className="text-white">{workoutData.duration}</span>
+          <span className="text-white">{formatDuration(session.duration)}</span>
         </div>
         <div className="bg-pinkish rounded-full px-4 py-2 flex items-center justify-center">
-          <span className="text-white">{workoutData.calories}</span>
+          <span className="text-white">{session.calories} kcal</span>
         </div>
       </div>
       
@@ -76,7 +237,11 @@ const WorkoutSession = () => {
       <div className="mb-6">
         <h2 className="text-xl mb-4 font-display font-bold">Exercices</h2>
         
-        {workoutData.exercises.map((exercise) => (
+        {exercises.length === 0 && (
+          <p className="text-center text-gray-500 mb-4">Aucun exercice dans cette séance</p>
+        )}
+        
+        {exercises.map((exercise) => (
           <div key={exercise.id} className="bg-yellow rounded-xl p-4 mb-4 relative">
             <div className="flex justify-between items-start">
               <div>
@@ -88,18 +253,33 @@ const WorkoutSession = () => {
                     </span>
                   ))}
                 </div>
-                <p className="text-sm text-dark">{exercise.sets}</p>
+                <p className="text-sm text-dark">{formatSets(exercise.sets)}</p>
               </div>
               
-              {/* Three dots menu button */}
-              <button 
-                className="text-gray-500 p-1"
-                onClick={() => handleEditExercise(exercise.id)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                </svg>
-              </button>
+              {/* Menu dropdown */}
+              <div className="relative group">
+                <button className="text-gray-500 p-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                  </svg>
+                </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block z-10">
+                  <div className="py-1">
+                    <button 
+                      onClick={() => handleEditExercise(exercise.id)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Modifier
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteExercise(exercise.id)}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
