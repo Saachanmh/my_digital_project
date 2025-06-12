@@ -15,8 +15,8 @@ const CreateWorkoutButton = ({ onClick }) => {
   return (
     <div className="px-4 mb-5">
       <button
-        className="shadow-normal w-full p-2 bg-purple rounded-xl text-base text-center transition-colors text-white font-display font-bold whitespace-nowrap"
-        onClick={onClick}
+        className="w-full p-2 bg-gray-100 rounded-xl text-base text-center transition-colors hover:bg-gray-200 active:bg-gray-300 whitespace-nowrap"
+        onClick={handleClick}
       >
         Créer une nouvelle routine d'entrainement
       </button>
