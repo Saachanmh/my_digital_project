@@ -10,6 +10,9 @@ import CreateExercisePage from '../pages/CreateExercisePage.jsx'
 import ExerciseDetailPage from '../pages/ExerciseDetailPage.jsx'
 import SignupPage from '../components/Auth/SignupPage.jsx'
 import UserInfoPage from '../components/Auth/UserInfoPage.jsx'
+import NewRoutinePage from '../pages/NewRoutinePage.jsx'
+import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
+import NewRoutinePage from '../pages/NewRoutinePage.jsx'
 import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
 
 function MainRouter () {
@@ -30,6 +33,9 @@ function MainRouter () {
             <Route path='/exercise/:id' element={<ExerciseDetailPage/>} />
             <Route path='signup' element={<SignupPage/>} />
             <Route path='user-info' element={<UserInfoPage/>} />
+            <Route path='/new-routine' element={<NewRoutinePage/>} />
+            <Route path='/create-workout' element={<CreateWorkoutPage/>} />
+            <Route path='/new-routine' element={<NewRoutinePage/>} />
             <Route path='/create-workout' element={<CreateWorkoutPage/>} />
         </Routes>
     )
