@@ -17,6 +17,7 @@ const WorkoutSession = () => {
     getExercisesBySessionId,
     updateSession,
     deleteExercise,
+    deleteSession,
     isInitialized 
   } = useStorageContext();
   
@@ -153,6 +154,18 @@ const WorkoutSession = () => {
     }
   };
 
+  const handleDeleteSession = async () => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) return;
+    
+    try {
+      await deleteSession(sessionId);
+      navigate('/training');
+    } catch (err) {
+      console.error('Erreur lors de la suppression de la séance:', err);
+      alert('Une erreur est survenue lors de la suppression de la séance');
+    }
+  };
+
   // Afficher un message de chargement
   if (isLoading) {
     return (
@@ -221,7 +234,18 @@ const WorkoutSession = () => {
         </svg>
       </button>
       
-      <h1 className="text-2xl font-bold mb-6 text-center pt-2 font-display">{session.name}</h1>
+      <div className="flex justify-center items-center mb-6 pt-2">
+        <h1 className="text-2xl font-bold text-center font-display">{session.name}</h1>
+        <button 
+          onClick={handleDeleteSession}
+          className="ml-2 text-red-600 p-2 rounded-full hover:bg-red-100"
+          aria-label="Supprimer cette séance"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
       
       {/* Duration and Calories */}
       <div className="flex gap-4 mb-6">

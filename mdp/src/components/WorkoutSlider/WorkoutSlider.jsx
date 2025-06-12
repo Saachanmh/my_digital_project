@@ -104,7 +104,7 @@ const WorkoutSlider = () => {
           
           <button
             onClick={handleCreateWorkout}
-            className="w-full bg-purple text-white font-bold py-3 px-6 rounded-xl shadow-normal hover:bg-purple-700 transition-colors"
+            className="w-full font-display bg-purple text-white font-bold py-3 px-6 rounded-xl shadow-normal hover:bg-purple-700 transition-colors"
           >
             Créer un entraînement
           </button>

@@ -242,7 +242,6 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             <button
               type="button"
               onClick={() => handleRestTimeChange(10)}
-              onClick={() => handleRestTimeChange(10)}
               className="w-8 h-8 flex items-center justify-center"
               disabled={isButtonDisabled}
             >
