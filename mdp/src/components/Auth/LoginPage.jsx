@@ -83,12 +83,17 @@ const LoginPage = () => {
           </Link>
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="w-full p-4 bg-dark font-display rounded-lg text-white font-medium mt-auto"
         >
           Connexion
         </button>
+        
+        <div className="flex justify-center mt-4 text-sm text-gray-500 space-x-4">
+          <Link to="/gcu" className="hover:text-blue-500">CGU</Link>
+          <Link to="/conditions-of-sale" className="hover:text-blue-500">Conditions de vente</Link>
+        </div>
       </form>
     </div>
   );
