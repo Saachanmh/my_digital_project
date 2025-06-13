@@ -9,7 +9,7 @@ const WorkoutSlider = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const { getAllRoutines, getAllSessions, isInitialized } = useStorageContext();
+  const { getAllRoutines, getAllSessions, getSessionsByRoutineId, isInitialized } = useStorageContext();
 
   // Charger les routines et séances depuis le stockage
   useEffect(() => {
@@ -19,7 +19,17 @@ const WorkoutSlider = () => {
         try {
           const routinesData = await getAllRoutines();
           const sessionsData = await getAllSessions();
-          setRoutines(routinesData || []);
+          
+          // Pour chaque routine, récupérer ses sessions associées
+          const routinesWithSessions = await Promise.all(routinesData.map(async (routine) => {
+            const routineSessions = await getSessionsByRoutineId(routine.id);
+            return {
+              ...routine,
+              sessions: routineSessions || []
+            };
+          }));
+          
+          setRoutines(routinesWithSessions || []);
           setSessions(sessionsData || []);
         } catch (err) {
           console.error('Erreur lors du chargement des données:', err);
@@ -31,7 +41,7 @@ const WorkoutSlider = () => {
       
       loadData();
     }
-  }, [isInitialized, getAllRoutines, getAllSessions]);
+  }, [isInitialized, getAllRoutines, getAllSessions, getSessionsByRoutineId]);
 
   const handleCreateWorkout = () => {
     navigate('/create-workout');
@@ -39,6 +49,10 @@ const WorkoutSlider = () => {
 
   const handleViewSession = (sessionId) => {
     navigate(`/workout-session/${sessionId}`);
+  };
+  
+  const handleEditRoutine = (routineId) => {
+    navigate(`/edit-routine/${routineId}`);
   };
 
   return (
@@ -61,9 +75,31 @@ const WorkoutSlider = () => {
             <div className="mb-6">
               <div className="flex overflow-x-auto gap-4 pb-2">
                 {routines.map(routine => (
-                  <div key={routine.id} className="min-w-[250px] bg-gray-100 rounded-xl p-4">
+                  <div 
+                    key={routine.id} 
+                    className="min-w-[250px] bg-gray-100 rounded-xl p-4 cursor-pointer hover:bg-gray-200 transition-colors"
+                    onClick={() => handleEditRoutine(routine.id)}
+                  >
                     <h4 className="text-base font-medium mb-2">{routine.name}</h4>
-                    <p className="text-sm text-gray-600 mb-3">{routine.details || 'Aucun détail'}</p>
+                    
+                    {/* Afficher les séances associées à cette routine */}
+                    {routine.sessions && routine.sessions.length > 0 ? (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-gray-700 mb-1">Séances:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {routine.sessions.map(session => (
+                            <span 
+                              key={session.id} 
+                              className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full"
+                            >
+                              {session.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-gray-500 mt-2">Aucune séance associée</p>
+                    )}
                   </div>
                 ))}
               </div>
