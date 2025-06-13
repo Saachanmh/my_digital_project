@@ -11,6 +11,7 @@ import ExerciseDetailPage from '../pages/ExerciseDetailPage.jsx'
 import SignupPage from '../components/Auth/SignupPage.jsx'
 import UserInfoPage from '../components/Auth/UserInfoPage.jsx'
 import NewRoutinePage from '../pages/NewRoutinePage.jsx'
+import EditRoutinePage from '../pages/EditRoutinePage.jsx'
 import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
 import GCUPage from '../pages/GCUPage.jsx'
 import ConditionsOfSalePage from '../pages/ConditionsOfSalePage.jsx'
@@ -36,6 +37,7 @@ function MainRouter () {
             <Route path='signup' element={<SignupPage/>} />
             <Route path='user-info' element={<UserInfoPage/>} />
             <Route path='/new-routine' element={<NewRoutinePage/>} />
+            <Route path='/edit-routine/:routineId' element={<EditRoutinePage/>} />
             <Route path='/create-workout' element={<CreateWorkoutPage/>} />
             <Route path='/create-workout/:routineId' element={<CreateWorkoutPage/>} />
             <Route path='/gcu' element={<GCUPage/>} />

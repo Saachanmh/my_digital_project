@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DailyWorkout from '../components/DailyWorkout/DailyWorkout';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStorageContext } from '../services/StorageContext';
-import { createRoutine, createSession } from '../services/models';
 
-function NewRoutinePage() {
+function EditRoutinePage() {
   const navigate = useNavigate();
+  const { routineId } = useParams();
   const [routineName, setRoutineName] = useState('');
   const [routineDetails, setRoutineDetails] = useState('');
   const [showSessionDrawer, setShowSessionDrawer] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingRoutine, setLoadingRoutine] = useState(true);
 
   // Contexte de stockage
   const { 
-    addRoutine, 
+    updateRoutine, 
+    getRoutineById,
     addSession, 
     getAllSessions, 
+    getSessionsByRoutineId,
     updateSession,
     isInitialized 
   } = useStorageContext();
@@ -34,10 +36,69 @@ function NewRoutinePage() {
   // sessions depuis la base de données
   const [sessions, setSessions] = useState([]);
 
-  // sessions selectionnés 
+  // sessions selectionnés pour cette routine
   const [selectedSessions, setSelectedSessions] = useState([]);
 
-  // Charger les sessions depuis la base de données
+  // Charger la routine et ses sessions
+  useEffect(() => {
+    if (isInitialized && routineId) {
+      const loadRoutineData = async () => {
+        try {
+          setLoadingRoutine(true);
+          // Charger la routine
+          const routine = await getRoutineById(routineId);
+          if (routine) {
+            setRoutineName(routine.name);
+            setRoutineDetails(routine.description || '');
+            
+            // Initialiser les jours sélectionnés
+            if (routine.days && routine.days.length > 0) {
+              const daysState = {
+                L: false,
+                M: false,
+                M2: false,
+                J: false,
+                V: false,
+                S: false,
+                D: false
+              };
+              
+              routine.days.forEach(day => {
+                daysState[day] = true;
+              });
+              
+              setSelectedDays(daysState);
+            }
+            
+            // Charger les sessions associées à cette routine
+            const routineSessions = await getSessionsByRoutineId(routineId);
+            setSelectedSessions(routineSessions || []);
+          } else {
+            console.error('Routine non trouvée');
+            navigate('/training');
+          }
+        } catch (error) {
+          console.error('Erreur lors du chargement de la routine:', error);
+        } finally {
+          setLoadingRoutine(false);
+        }
+      };
+      
+      loadRoutineData();
+    }
+  }, [isInitialized, routineId, getRoutineById, getSessionsByRoutineId, navigate]);
+  
+  // Garder une référence aux sessions originales pour comparer lors de la mise à jour
+  const [originalSessions, setOriginalSessions] = useState([]);
+  
+  useEffect(() => {
+    // Mettre à jour les sessions originales lorsque les sessions sélectionnées changent initialement
+    if (selectedSessions.length > 0 && originalSessions.length === 0) {
+      setOriginalSessions([...selectedSessions]);
+    }
+  }, [selectedSessions, originalSessions]);
+
+  // Charger toutes les sessions disponibles
   useEffect(() => {
     if (isInitialized) {
       const loadSessions = async () => {
@@ -68,7 +129,14 @@ function NewRoutinePage() {
   };
 
   const handleSessionSelect = (session) => {
-    // Create a new session with selected days
+    // Vérifier si la session est déjà sélectionnée
+    const isAlreadySelected = selectedSessions.some(s => s.id === session.id);
+    if (isAlreadySelected) {
+      alert('Cette séance est déjà dans la routine');
+      return;
+    }
+
+    // Créer une nouvelle session avec les jours sélectionnés
     const selectedDaysArray = Object.entries(selectedDays)
       .filter(([_, isSelected]) => isSelected)
       .map(([day]) => day);
@@ -78,12 +146,12 @@ function NewRoutinePage() {
       return;
     }
 
-    const newSession = {
+    const sessionWithDays = {
       ...session,
       days: selectedDaysArray
     };
 
-    setSelectedSessions([...selectedSessions, newSession]);
+    setSelectedSessions([...selectedSessions, sessionWithDays]);
     setSelectedDays({
       L: false,
       M: false,
@@ -96,7 +164,11 @@ function NewRoutinePage() {
     setShowSessionDrawer(false);
   };
 
-  const handleAddRoutine = async () => {
+  const handleRemoveSession = (sessionId) => {
+    setSelectedSessions(selectedSessions.filter(session => session.id !== sessionId));
+  };
+
+  const handleUpdateRoutine = async () => {
     if (!routineName) {
       alert('Veuillez donner un nom à votre routine');
       return;
@@ -108,53 +180,70 @@ function NewRoutinePage() {
     }
 
     try {
-      // Créer la routine
+      // Mettre à jour la routine
       const selectedDaysArray = Array.from(new Set(
-        selectedSessions.flatMap(session => session.days)
+        selectedSessions.flatMap(session => session.days || [])
       ));
 
-      const newRoutine = createRoutine(
-        routineName,
-        routineDetails,
-        selectedDaysArray
-      );
+      const updatedRoutine = {
+        id: routineId,
+        name: routineName,
+        description: routineDetails,
+        days: selectedDaysArray,
+        updatedAt: new Date().toISOString()
+      };
 
-      // Ajouter la routine à la base de données
-      const routineId = await addRoutine(newRoutine);
+      await updateRoutine(updatedRoutine);
 
-      // Associer les sessions existantes à cette routine
+      // Identifier les sessions qui ont été supprimées
+      const currentSessionIds = selectedSessions.map(session => session.id);
+      const removedSessions = originalSessions.filter(session => !currentSessionIds.includes(session.id));
+      
+      // Mettre à jour les sessions supprimées pour enlever leur association avec cette routine
+      for (const sessionData of removedSessions) {
+        const updatedSession = {
+          ...sessionData,
+          routineId: null, // Enlever l'association avec la routine
+          updatedAt: new Date().toISOString()
+        };
+        await updateSession(updatedSession);
+      }
+
+      // Mettre à jour les sessions associées
       for (const sessionData of selectedSessions) {
-        // Si la session a déjà un ID, c'est une session existante
-        if (sessionData.id) {
-          // Nous ne créons pas de nouvelle session, mais nous pouvons mettre à jour
-          // la session existante si nécessaire (par exemple, pour ajouter des jours)
-          // Cette étape est optionnelle selon votre logique métier
-          console.log(`Session existante associée à la routine: ${sessionData.id}`);
-        } else {
-          // C'est une nouvelle session, nous la créons
-          const newSession = createSession(
-            sessionData.name,
-            routineId,
-            60, // durée par défaut
-            300 // calories par défaut
-          );
-
-          await addSession(newSession);
+        // Si la session a un routineId différent ou n'en a pas, c'est une nouvelle association
+        if (sessionData.routineId !== routineId) {
+          const updatedSession = {
+            ...sessionData,
+            routineId: routineId,
+            updatedAt: new Date().toISOString()
+          };
+          await updateSession(updatedSession);
         }
       }
 
       // Naviguer vers la page d'entraînement
       navigate('/training');
     } catch (error) {
-      console.error('Erreur lors de la création de la routine:', error);
-      alert('Une erreur est survenue lors de la création de la routine');
+      console.error('Erreur lors de la mise à jour de la routine:', error);
+      alert('Une erreur est survenue lors de la mise à jour de la routine');
     }
   };
+
+  if (loadingRoutine) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
+        <div className="p-4 flex-1 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
       <div className="p-4 flex-1">
-        <h1 className="text-2xl font-bold mb-6">Nouvelle Routine</h1>
+        <h1 className="text-2xl font-bold mb-6">Modifier la Routine</h1>
         
         {/* Routine Details Form */}
         <div className="mb-6">
@@ -178,9 +267,17 @@ function NewRoutinePage() {
         {/* Selected Sessions List */}
         <div className="mb-6">
           {selectedSessions.map((session, index) => (
-            <div key={index} className="bg-gray-100 p-3 rounded-lg mb-3">
-              <h3 className="font-semibold">{session.name}</h3>
-              <p className="text-sm text-gray-600">Jours: {session.days.join(', ')}</p>
+            <div key={index} className="bg-gray-100 p-3 rounded-lg mb-3 flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold">{session.name}</h3>
+                <p className="text-sm text-gray-600">Jours: {session.days ? session.days.join(', ') : 'Aucun jour'}</p>
+              </div>
+              <button 
+                onClick={() => handleRemoveSession(session.id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                Supprimer
+              </button>
             </div>
           ))}
         </div>
@@ -195,10 +292,10 @@ function NewRoutinePage() {
 
         {/* Save Routine Button */}
         <button
-          onClick={handleAddRoutine}
+          onClick={handleUpdateRoutine}
           className="w-full p-4 bg-purple text-white rounded-lg text-center"
         >
-          Enregistrer la routine
+          Mettre à jour la routine
         </button>
       </div>
 
@@ -271,4 +368,4 @@ function NewRoutinePage() {
   );
 }
 
-export default NewRoutinePage;
+export default EditRoutinePage;
