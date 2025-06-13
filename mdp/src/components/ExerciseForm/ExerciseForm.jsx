@@ -23,7 +23,13 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   };
 
   // Use initial exercise data if in edit mode, otherwise use defaults
-  const [exercise, setExercise] = useState(isEditMode ? initialExercise : defaultExercise);
+  const [exercise, setExercise] = useState(isEditMode ? {
+    ...initialExercise,
+    muscles: initialExercise?.muscles || ['muscle1'], // Ensure muscles array exists
+    sets: initialExercise?.sets || [{ reps: '', weight: '' }], // Ensure sets array exists
+    restTime: initialExercise?.restTime || 120,
+    comments: initialExercise?.comments || ''
+  } : defaultExercise);
   
   // Charger les données de l'exercice si on est en mode édition
   useEffect(() => {
@@ -159,7 +165,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             <div className="flex items-center mb-2">
               <h2 className="text-lg font-medium">{exercise.name}</h2>
               <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full ml-2">
-                {exercise.muscles[0]}
+                {exercise.muscles && exercise.muscles.length > 0 ? exercise.muscles[0] : 'Aucun muscle'}
               </span>
             </div>
           ) : (
@@ -176,7 +182,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
               />
               <div className="flex items-center mt-2">
                 <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
-                  {exercise.muscles[0]}
+                  {exercise.muscles && exercise.muscles.length > 0 ? exercise.muscles[0] : 'Aucun muscle'}
                 </span>
               </div>
             </div>
