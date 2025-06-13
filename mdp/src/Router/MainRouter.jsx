@@ -12,6 +12,8 @@ import SignupPage from '../components/Auth/SignupPage.jsx'
 import UserInfoPage from '../components/Auth/UserInfoPage.jsx'
 import NewRoutinePage from '../pages/NewRoutinePage.jsx'
 import CreateWorkoutPage from '../pages/CreateWorkoutPage.jsx'
+import GCUPage from '../pages/GCUPage.jsx'
+import ConditionsOfSalePage from '../pages/ConditionsOfSalePage.jsx'
 
 function MainRouter () {
     return (
@@ -36,7 +38,8 @@ function MainRouter () {
             <Route path='/new-routine' element={<NewRoutinePage/>} />
             <Route path='/create-workout' element={<CreateWorkoutPage/>} />
             <Route path='/create-workout/:routineId' element={<CreateWorkoutPage/>} />
-            <Route path='/new-routine' element={<NewRoutinePage/>} />
+            <Route path='/gcu' element={<GCUPage/>} />
+            <Route path='/conditions-of-sale' element={<ConditionsOfSalePage/>} />
         </Routes>
     )
 }
