@@ -1,17 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import ExerciseForm from '../components/ExerciseForm/ExerciseForm';
+import { useStorageContext } from '../services/StorageContext';
 
 const EditExercisePage = () => {
-  // Mock data for the exercise being edited
-  const exerciseData = {
-    name: 'Lat pulldown',
-    muscles: ['muscle1'],
-    sets: [{ reps: '12', weight: '40kg' }, { reps: '12', weight: '40' }, { reps: '12', weight: '40' }],
-    restTime: 120,
-    comments: 'super description de cet exo de ouf\nj\'adore suer et transpirer en homme musculeux'
-  };
+  // Récupérer l'ID de l'exercice depuis les paramètres d'URL
+  const { id } = useParams(); // Utiliser 'id' au lieu de 'exerciseId' pour correspondre à la route
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const sessionId = searchParams.get('sessionId');
 
-  return <ExerciseForm isEditMode={true} initialExercise={exerciseData} />;
+  // Utiliser le contexte de stockage
+  const { getExerciseById } = useStorageContext();
+  const [exercise, setExercise] = useState({ id, sessionId, muscles: ['muscle1'] });
+  const [loading, setLoading] = useState(true);
+
+  // Charger les données de l'exercice
+  useEffect(() => {
+    const loadExercise = async () => {
+      try {
+        if (id) {
+          const exerciseData = await getExerciseById(id);
+          if (exerciseData) {
+            setExercise(exerciseData);
+          }
+        }
+      } catch (err) {
+        console.error('Erreur lors du chargement de l\'exercice:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadExercise();
+  }, [id, getExerciseById]);
+
+  if (loading) {
+    return <div className="p-4">Chargement...</div>;
+  }
+
+  return (
+    <ExerciseForm 
+      isEditMode={true} 
+      initialExercise={exercise} 
+    />
+  );
 };
 
 export default EditExercisePage;

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStorageContext } from '../../services/StorageContext';
 import { createExercise } from '../../services/models';
+import { TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { getAllExos, getExosById } from '../../api/exerciseDB';
 
 const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   const navigate = useNavigate();
@@ -11,6 +14,12 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   // Récupérer le sessionId depuis les paramètres de l'URL
   const searchParams = new URLSearchParams(location.search);
   const sessionId = searchParams.get('sessionId');
+
+  // États pour la recherche d'exercices
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Default values for a new exercise
   const defaultExercise = {
@@ -23,7 +32,13 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   };
 
   // Use initial exercise data if in edit mode, otherwise use defaults
-  const [exercise, setExercise] = useState(isEditMode ? initialExercise : defaultExercise);
+  const [exercise, setExercise] = useState(isEditMode ? {
+    ...initialExercise,
+    muscles: initialExercise?.muscles || ['muscle1'], // Ensure muscles array exists
+    sets: initialExercise?.sets || [{ reps: '', weight: '' }], // Ensure sets array exists
+    restTime: initialExercise?.restTime || 120,
+    comments: initialExercise?.comments || ''
+  } : defaultExercise);
   
   // Charger les données de l'exercice si on est en mode édition
   useEffect(() => {
@@ -42,6 +57,23 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
       loadExercise();
     }
   }, [isEditMode, initialExercise, getExerciseById]);
+
+  // Charger tous les exercices de l'API
+  useEffect(() => {
+    const fetchAllExercises = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllExos();
+        setAllExercises(data);
+      } catch (error) {
+        console.error('Error fetching all exercises:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllExercises();
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -73,7 +105,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
           exercise.muscles,
           exercise.sets,
           exercise.comments,
-          ''
+          exercise.imageUrl || ''
         );
         
         await addExercise(newExercise);
@@ -101,8 +133,43 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
     }));
   };
 
+  // Handle search input changes
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    
+    if (value.trim() === '') {
+      setSearchResults([]);
+      return;
+    }
+    
+    // Filter exercises based on search term
+    const filteredResults = allExercises.filter(ex => 
+      ex.name.toLowerCase().includes(value.toLowerCase())
+    );
+    
+    setSearchResults(filteredResults.slice(0, 10)); // Limit to 10 results
+  };
+
+  // Handle selecting an exercise from search results
+  const handleSelectExercise = (selectedExercise) => {
+    setExercise(prev => ({
+      ...prev,
+      name: selectedExercise.name,
+      muscles: [selectedExercise.bodyPart, selectedExercise.target],
+      imageUrl: selectedExercise.gifUrl
+    }));
+    setSearchTerm('');
+    setSearchResults([]);
+  };
+
   // Handle set input changes
   const handleSetInputChange = (index, field, value) => {
+    // Vérifier que la valeur est numérique
+    if (value !== '' && isNaN(value)) {
+      return; // Ne pas mettre à jour si la valeur n'est pas numérique
+    }
+    
     const newSets = [...exercise.sets];
     newSets[index][field] = value;
     setExercise(prev => ({
@@ -159,26 +226,81 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
             <div className="flex items-center mb-2">
               <h2 className="text-lg font-medium">{exercise.name}</h2>
               <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full ml-2">
-                {exercise.muscles[0]}
+                {exercise.muscles && exercise.muscles.length > 0 ? exercise.muscles[0] : 'Aucun muscle'}
               </span>
             </div>
           ) : (
             <div className="flex flex-col mb-4">
               <label htmlFor="exerciseName" className="mb-2">Nom de l'exercice</label>
-              <input
-                type="text"
-                id="exerciseName"
-                name="name"
-                value={exercise.name}
-                onChange={handleInputChange}
-                placeholder="Ex: Développé couché"
-                className="p-2 border rounded-lg"
-              />
-              <div className="flex items-center mt-2">
-                <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
-                  {exercise.muscles[0]}
-                </span>
+              <div className="relative">
+                <TextField
+                  fullWidth
+                  placeholder="Rechercher un exercice"
+                  variant="outlined"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                    className: 'rounded-full bg-gray-200',
+                  }}
+                  sx={{ '& .MuiOutlinedInput-notchedOutline': { border: 'none' } }}
+                />
+                
+                {/* Search Results Dropdown */}
+                {searchTerm && searchResults.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {searchResults.map(exercise => (
+                      <div 
+                        key={exercise.id}
+                        className="p-3 hover:bg-gray-100 cursor-pointer flex items-center"
+                        onClick={() => handleSelectExercise(exercise)}
+                      >
+                        {exercise.gifUrl && (
+                          <img 
+                            src={exercise.gifUrl} 
+                            alt={exercise.name} 
+                            className="w-10 h-10 mr-3 object-cover rounded"
+                          />
+                        )}
+                        <div>
+                          <div className="font-medium">{exercise.name}</div>
+                          <div className="text-sm text-gray-600">{exercise.bodyPart}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {searchTerm && searchResults.length === 0 && !loading && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-3 text-center">
+                    Aucun exercice trouvé
+                  </div>
+                )}
               </div>
+              
+              {exercise.name && (
+                <div className="mt-4 p-3 border border-gray-200 rounded-lg">
+                  <div className="font-medium">{exercise.name}</div>
+                  <div className="flex items-center mt-2">
+                    {exercise.muscles.map((muscle, index) => (
+                      <span key={index} className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full mr-2">
+                        {muscle}
+                      </span>
+                    ))}
+                  </div>
+                  {exercise.imageUrl && (
+                    <img 
+                      src={exercise.imageUrl} 
+                      alt={exercise.name} 
+                      className="w-full h-40 mt-2 object-contain rounded"
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -192,21 +314,25 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
               <React.Fragment key={index}>
                 <div className="bg-gray-100 rounded-lg p-2 text-center">
                   <input
-                    type="text"
+                    type="number"
                     value={set.reps}
                     onChange={(e) => handleSetInputChange(index, 'reps', e.target.value)}
                     className="w-full bg-transparent text-center"
                     placeholder="reps"
+                    min="0"
                   />
                 </div>
                 <div className="bg-gray-100 rounded-lg p-2 text-center">
                   <input
-                    type="text"
+                    type="number"
                     value={set.weight}
                     onChange={(e) => handleSetInputChange(index, 'weight', e.target.value)}
                     className="w-full bg-transparent text-center"
                     placeholder="weight"
+                    min="0"
+                    step="0.5"
                   />
+                  <span className="text-xs text-gray-500">kg</span>
                 </div>
               </React.Fragment>
             ))}

@@ -10,6 +10,7 @@ const WorkoutSession = () => {
   const [error, setError] = useState(null);
   const [session, setSession] = useState(null);
   const [exercises, setExercises] = useState([]);
+  const [openMenuId, setOpenMenuId] = useState(null);
   
   // Utiliser le contexte de stockage
   const { 
@@ -166,6 +167,28 @@ const WorkoutSession = () => {
     }
   };
 
+  const toggleMenu = (exerciseId, event) => {
+    // Empêcher la propagation pour éviter que le document.addEventListener ne se déclenche immédiatement
+    if (event) {
+      event.stopPropagation();
+    }
+    setOpenMenuId(openMenuId === exerciseId ? null : exerciseId);
+  };
+
+  // Fermer le menu lorsqu'on clique n'importe où sur la page
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (openMenuId !== null) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [openMenuId]);
+
   // Afficher un message de chargement
   if (isLoading) {
     return (
@@ -281,28 +304,43 @@ const WorkoutSession = () => {
               </div>
               
               {/* Menu dropdown */}
-              <div className="relative group">
-                <button className="text-gray-500 p-1">
+              <div className="relative">
+                <button 
+                  className="text-gray-500 p-1" 
+                  onClick={(e) => toggleMenu(exercise.id, e)}
+                  aria-label="Menu options"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="black">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                   </svg>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block z-10">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => handleEditExercise(exercise.id)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Modifier
-                    </button>
-                    <button 
-                      onClick={() => handleDeleteExercise(exercise.id)}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                    >
-                      Supprimer
-                    </button>
+                {openMenuId === exercise.id && (
+                  <div 
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+                    onClick={(e) => e.stopPropagation()} // Empêcher la propagation pour éviter que le menu ne se ferme quand on clique dessus
+                  >
+                    <div className="py-1">
+                      <button 
+                        onClick={() => {
+                          handleEditExercise(exercise.id);
+                          setOpenMenuId(null);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Modifier
+                      </button>
+                      <button 
+                        onClick={() => {
+                          handleDeleteExercise(exercise.id);
+                          setOpenMenuId(null);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
