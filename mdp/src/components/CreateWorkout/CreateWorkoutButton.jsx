@@ -5,29 +5,15 @@ import { useState, useEffect } from 'react';
 
 const CreateWorkoutButton = ({onClick}) => {
   const navigate = useNavigate();
-  const [hasData, setHasData] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   
-  const { getAllRoutines, getAllSessions, isInitialized } = useStorageContext();
+  const { isInitialized } = useStorageContext();
   
   useEffect(() => {
     if (isInitialized) {
-      const checkData = async () => {
-        try {
-          const routines = await getAllRoutines();
-          const sessions = await getAllSessions();
-          setHasData((routines && routines.length > 0) || (sessions && sessions.length > 0));
-        } catch (error) {
-          console.error('Erreur lors de la vérification des données:', error);
-          setHasData(false);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      
-      checkData();
+      setIsLoading(false);
     }
-  }, [isInitialized, getAllRoutines, getAllSessions]);
+  }, [isInitialized]);
 
   const handleClick = () => {
     navigate('/new-routine');
@@ -35,10 +21,6 @@ const CreateWorkoutButton = ({onClick}) => {
 
   if (isLoading) {
     return null; // Ne rien afficher pendant le chargement
-  }
-
-  if (hasData) {
-    return null; // Ne pas afficher le bouton s'il y a déjà des données
   }
 
   return (
