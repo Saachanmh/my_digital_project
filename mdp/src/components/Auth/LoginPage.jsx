@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { loginUser } from '../../services/authService';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -8,6 +9,8 @@ const LoginPage = () => {
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,13 +18,34 @@ const LoginPage = () => {
       ...prevState,
       [name]: value
     }));
+    // Clear error when user starts typing again
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically handle authentication
-    console.log('Login attempt with:', formData);
-    navigate('/'); // Navigate to home page after login
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      // Authenticate user with the authService
+      const user = await loginUser(formData.firstName, formData.password);
+      
+      if (user) {
+        // Store user data in localStorage for session management
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        console.log('Login successful:', user);
+        navigate('/'); // Navigate to home page after login
+      } else {
+        // Generic error message for security (doesn't reveal if username or password is incorrect)
+        setError('Identifiants incorrects. Veuillez vérifier votre prénom et mot de passe.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -36,6 +60,12 @@ const LoginPage = () => {
         Pas de compte ? <Link to="/signup" className="text-blue-500 underline">Inscris-toi</Link>
       </p>
 
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
         <div className="mb-2">
           <input
@@ -46,6 +76,7 @@ const LoginPage = () => {
             placeholder="Prénom"
             className="w-full p-4 bg-purple rounded-lg text-white"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -58,11 +89,13 @@ const LoginPage = () => {
             placeholder="Mot de passe"
             className="w-full p-4 bg-purple rounded-lg pr-12 text-white"
             required
+            disabled={isLoading}
           />
           <button 
             type="button" 
             onClick={togglePasswordVisibility}
             className="absolute right-4 top-1/2 transform -translate-y-1/2"
+            disabled={isLoading}
           >
             {showPassword ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
@@ -85,9 +118,10 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          className="w-full p-4 bg-dark font-display rounded-lg text-white font-medium mt-auto"
+          className={`w-full p-4 bg-dark font-display rounded-lg text-white font-medium mt-auto ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+          disabled={isLoading}
         >
-          Connexion
+          {isLoading ? 'Connexion en cours...' : 'Connexion'}
         </button>
         
         <div className="flex justify-center mt-4 text-sm text-gray-500 space-x-4">
