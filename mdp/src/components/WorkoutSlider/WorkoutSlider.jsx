@@ -125,7 +125,7 @@ const WorkoutSlider = () => {
                   >
                     <div className="flex flex-col">
                       <h4 className={`text-base font-bold mb-1 font-display ${textColorClass}`}>{session.name}</h4>
-                      <p className={`text-sm ${textColorClass} mb-2`}>{session.duration}h30</p>
+                      <p className={`text-sm ${textColorClass} mb-2`}>{session.duration}min</p>
                       <p className={`text-xs ${textColorClass}`}>Pecs - Épaules - Triceps</p>
                     </div>
                   </div>
@@ -140,7 +140,7 @@ const WorkoutSlider = () => {
           
           <button
             onClick={handleCreateWorkout}
-            className="w-full font-display bg-purple text-white font-bold py-3 px-6 rounded-xl shadow-normal hover:bg-purple-700 transition-colors"
+            className="w-full font-display bg-dark text-white font-bold py-3 px-6 rounded-xl shadow-normal hover:bg-purple-700 transition-colors"
           >
             Créer un entraînement
           </button>

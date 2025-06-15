@@ -15,8 +15,8 @@
             "type": "image/png"
         }
     ],
-    "orientation": "any",
-    "display": "fullscreen",
+    "orientation": "portrait",
+    "display": "standalone",
     "dir": "auto",
     "lang": "fr-FR",
     "name": "fit'else",
