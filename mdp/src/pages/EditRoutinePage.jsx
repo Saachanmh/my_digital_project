@@ -232,7 +232,7 @@ function EditRoutinePage() {
 
   if (loadingRoutine) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
+      <div className="flex flex-col min-h-screen bg-gray-50 pb-24">
         <div className="p-4 flex-1 flex justify-center items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
@@ -241,7 +241,7 @@ function EditRoutinePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
+    <div className="flex flex-col min-h-screen bg-gray-50 pb-24">
       <div className="p-4 flex-1">
         <h1 className="text-2xl font-bold mb-6">Modifier la Routine</h1>
         

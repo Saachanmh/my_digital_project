@@ -94,7 +94,7 @@ const ExercicePage = () => {
   };
 
   return (
-    <div className="p-4 pb-16 relative min-h-screen bg-white">
+    <div className="p-4 pb-24 relative min-h-screen bg-white">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-display">Exercices</h1>
         <button className="text-gray-600 text-sm">Voir tout</button>

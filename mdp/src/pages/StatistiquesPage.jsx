@@ -30,7 +30,7 @@ const StatistiquesPage = () => {
   }
 
   return (
-    <Box className="w-full p-4 pb-16">
+    <Box className="w-full p-4 pb-24">
       <h1 className="font-display text-2xl mb-4">Statistiques</h1>
       
       {/* Calorie and Objective Cards */}

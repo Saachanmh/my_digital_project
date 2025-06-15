@@ -152,7 +152,7 @@ function NewRoutinePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 pb-16">
+    <div className="flex flex-col min-h-screen bg-gray-50 pb-24">
       <div className="p-4 flex-1">
         <h1 className="text-2xl font-bold mb-6">Nouvelle Routine</h1>
         

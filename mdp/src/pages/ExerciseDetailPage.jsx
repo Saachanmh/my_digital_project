@@ -36,7 +36,7 @@ const ExerciseDetailPage = () => {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-white pb-16">
+    <div className="min-h-screen bg-white pb-24">
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <CircularProgress />

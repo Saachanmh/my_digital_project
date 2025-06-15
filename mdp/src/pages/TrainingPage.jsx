@@ -5,7 +5,7 @@ import WorkoutSlider from '../components/WorkoutSlider/WorkoutSlider';
 
 function TrainingPage() {
   return (
-    <div className="App pb-16">
+    <div className="App pb-24">
       <WeeklyCalendar />
       <CreateWorkoutButton />
       <WeeklyHistory />

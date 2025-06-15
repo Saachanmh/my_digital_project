@@ -70,63 +70,57 @@ const CreateWorkoutPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white">
-      {/* Header */}
-      <div className="bg-black text-white p-4">
-        <h1 className="text-lg font-medium">Page créer séance</h1>
-      </div>
-
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Main content */}
-      <div className="flex-1 flex flex-col p-4">
+      <div className="flex-1 flex flex-col p-6 pt-8">
         {/* Workout name input */}
-        <div className="mb-4">
+        <div className="mb-6">
           <input
             type="text"
             placeholder="Votre nom de séance"
             value={sessionName}
             onChange={(e) => setSessionName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-full bg-gray-50 focus:outline-none"
+            className="w-full p-4 border border-gray-200 rounded-full bg-white shadow-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-purple)]"
           />
         </div>
 
         {/* Time and calories selectors */}
-        <div className="flex space-x-2 mb-6">
-          <div className="flex-1 bg-gray-100 rounded-full p-3 flex items-center justify-center">
-            <input 
-              type="number" 
-              value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
-              className="w-16 bg-transparent text-center focus:outline-none"
-              min="5"
-              max="240"
-            />
-            <span className="ml-1 text-gray-500">min</span>
+        <div className="flex gap-3 mb-8">
+          <div className="relative flex-1">
+            <div className="w-8 h-8 rounded-full bg-gray-300 absolute -top-3 left-4 z-10"></div>
+            <div className="w-full bg-white rounded-full p-4 pl-16 flex items-center justify-center shadow-sm border border-gray-200">
+              <input 
+                type="number" 
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                className="w-12 bg-transparent text-center focus:outline-none"
+                min="5"
+                max="240"
+              />
+              <span className="ml-1 text-gray-500">min</span>
+            </div>
           </div>
-          <div className="flex-1 bg-gray-100 rounded-full p-3 flex items-center justify-center">
-            <input 
-              type="number" 
-              value={calories}
-              onChange={(e) => setCalories(Number(e.target.value))}
-              className="w-16 bg-transparent text-center focus:outline-none"
-              min="0"
-              max="2000"
-            />
-            <span className="ml-1 text-gray-500">kcal</span>
+          <div className="relative flex-1">
+            <div className="w-8 h-8 rounded-full bg-gray-300 absolute -top-3 left-4 z-10"></div>
+            <div className="w-full bg-white rounded-full p-4 pl-16 flex items-center justify-center shadow-sm border border-gray-200">
+              <input 
+                type="number" 
+                value={calories}
+                onChange={(e) => setCalories(Number(e.target.value))}
+                className="w-12 bg-transparent text-center focus:outline-none"
+                min="0"
+                max="2000"
+              />
+              <span className="ml-1 text-gray-500">kcal</span>
+            </div>
           </div>
-          <button 
-            onClick={handleStart}
-            disabled={isLoading}
-            className="flex-grow-2 bg-gray-200 rounded-full p-3 text-center font-medium disabled:opacity-50"
-          >
-            {isLoading ? 'Création...' : 'Commencer'}
-          </button>
         </div>
 
         {/* Exercises section */}
-        <div className="mb-4">
-          <h2 className="text-base font-medium mb-2">Exercices</h2>
+        <div className="mb-6">
+          <h2 className="text-base font-medium mb-4">Exercices</h2>
           <button 
-            className="w-full bg-gray-200 rounded-xl p-4 text-center"
+            className="w-full bg-gray-200 rounded-3xl p-6 text-center shadow-sm"
             onClick={() => {
               // Créer la nouvelle séance d'abord
               if (!sessionName.trim()) {
@@ -168,16 +162,6 @@ const CreateWorkoutPage = () => {
         {/* Empty space for exercise list */}
         <div className="flex-1"></div>
 
-        {/* Pagination dots */}
-        <div className="flex justify-center space-x-2 py-4">
-          {[1, 2, 3, 4].map((step) => (
-            <div 
-              key={step}
-              className={`w-6 h-6 rounded-full ${currentStep === step ? 'bg-black' : 'bg-gray-300'}`}
-              onClick={() => setCurrentStep(step)}
-            ></div>
-          ))}
-        </div>
       </div>
     </div>
   );

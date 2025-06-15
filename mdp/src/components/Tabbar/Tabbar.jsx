@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import imageAccueil from '../../assets/home.png';
-import imageEntrainement from '../../assets/barbell.png';
-import imageUtilisateur from '../../assets/user.png';
-import imageAutre from '../../assets/ellipsis.png';
+import imageEntrainement from '../../assets/dumbbell.png';
+import imageUtilisateur from '../../assets/stats.png';
+import imageAutre from '../../assets/connection.png';
 
 const TabBar = () => {
     const navigate = useNavigate();
@@ -15,59 +15,60 @@ const TabBar = () => {
     };
 
     return (
-        <div className="flex justify-around bg-gray-100 p-3 fixed bottom-0 w-full shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
-            <button 
-                className="flex flex-col items-center focus:outline-none"
-                onClick={() => navigate('/')}
-            >
-                <img 
-                    src={imageAccueil} 
-                    alt="Accueil" 
-                    className={`w-7 h-7 mb-1 ${isActive('/') ? 'filter brightness-75 sepia-100 hue-rotate-190 saturate-500' : ''}`}
-                />
-                <span className={`text-xs ${isActive('/') ? 'text-blue-500 font-bold' : 'text-gray-700'}`}>
-                    Home
-                </span>
-            </button>
-            <button 
-                className="flex flex-col items-center focus:outline-none"
-                onClick={() => navigate('/exercise')}
-            >
-                <img 
-                    src={imageEntrainement} 
-                    alt="Entrainement" 
-                    className={`w-7 h-7 mb-1 ${isActive('/exercice') ? 'filter brightness-75 sepia-100 hue-rotate-190 saturate-500' : ''}`}
-                />
-                <span className={`text-xs ${isActive('/exercice') ? 'text-blue-500 font-bold' : 'text-gray-700'}`}>
-                    Entrainements
-                </span>
-            </button>
-            <button 
-                className="flex flex-col items-center focus:outline-none"
-                onClick={() => navigate('/stat')}
-            >
-                <img 
-                    src={imageUtilisateur} 
-                    alt="Utilisateurs" 
-                    className={`w-7 h-7 mb-1 ${isActive('/stat') ? 'filter brightness-75 sepia-100 hue-rotate-190 saturate-500' : ''}`}
-                />
-                <span className={`text-xs ${isActive('/stat') ? 'text-blue-500 font-bold' : 'text-gray-700'}`}>
-                    Utilisateurs
-                </span>
-            </button>
-            <button 
-                className="flex flex-col items-center focus:outline-none"
-                onClick={() => navigate('/login')}
-            >
-                <img 
-                    src={imageAutre} 
-                    alt="Plus" 
-                    className={`w-7 h-7 mb-1 ${isActive('/login') ? 'filter brightness-75 sepia-100 hue-rotate-190 saturate-500' : ''}`}
-                />
-                <span className={`text-xs ${isActive('/login') ? 'text-blue-500 font-bold' : 'text-gray-700'}`}>
-                    Connexion
-                </span>
-            </button>
+        <div className="fixed bottom-4 w-full left-1/2 transform px-[26px] -translate-x-1/2 flex items-center justify-center z-50">
+            <div className="flex w-full items-center justify-between bg-white rounded-full shadow-lg px-2 py-2">
+                <button 
+                    className={`flex flex-col items-center justify-center mx-3 focus:outline-none`}
+                    onClick={() => navigate('/')}
+                >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
+                        <img 
+                            src={imageAccueil} 
+                            alt="Accueil" 
+                            className="w-6 h-6"
+                        />
+                    </div>
+                </button>
+                
+                <button 
+                    className={`flex flex-col items-center justify-center mx-3 focus:outline-none`}
+                    onClick={() => navigate('/exercise')}
+                >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/exercice') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
+                        <img 
+                            src={imageEntrainement} 
+                            alt="Entrainement" 
+                            className="w-6 h-6"
+                        />
+                    </div>
+                </button>
+                
+                <button 
+                    className={`flex flex-col items-center justify-center mx-3 focus:outline-none`}
+                    onClick={() => navigate('/stat')}
+                >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/stat') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
+                        <img 
+                            src={imageUtilisateur} 
+                            alt="Utilisateurs" 
+                            className="w-6 h-6"
+                        />
+                    </div>
+                </button>
+                
+                <button 
+                    className={`flex flex-col items-center justify-center mx-3 focus:outline-none`}
+                    onClick={() => navigate('/login')}
+                >
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/login') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
+                        <img 
+                            src={imageAutre} 
+                            alt="Plus" 
+                            className="w-6 h-6"
+                        />
+                    </div>
+                </button>
+            </div>
         </div>
     );
 };
