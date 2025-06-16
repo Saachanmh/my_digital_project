@@ -299,7 +299,7 @@ const WorkoutTimer = () => {
       </main>
 
       {/* Footer with timer */}
-      <footer className="bg-gray-200 p-6 rounded-t-3xl relative">
+      <footer className="bg-gray-200 p-6 pb-24 rounded-t-3xl relative">
         {/* Checkmark icon in center top */}
         <div 
           className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 ${isExerciseCompleted ? 'bg-green-500' : 'bg-gray-200'} rounded-full flex items-center justify-center cursor-pointer ${!isResting && !isExerciseCompleted ? 'hover:bg-green-400' : ''}`}

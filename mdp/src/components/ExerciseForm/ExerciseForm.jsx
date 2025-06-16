@@ -214,7 +214,7 @@ const ExerciseForm = ({ isEditMode = false, initialExercise = null }) => {
   };
 
   return (
-    <div className="p-4 bg-white min-h-screen">
+    <div className="p-4 pb-24 bg-white min-h-screen">
       <h1 className="text-2xl font-bold mb-6">
         {isEditMode ? 'Modifier exercice' : 'Créer exercice'}
       </h1>
