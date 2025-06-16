@@ -5,6 +5,18 @@ import TabBar from '../components/Tabbar/Tabbar';
 import CategoryDrawer from '../components/Drawers/CategoryDrawer';
 import { getAllExos, getExosByBodyPart } from '../api/exerciseDB';
 import { useNavigate } from 'react-router-dom';
+import './ExercisePage.css'
+
+// Import des images
+import imgFessiers from '../assets/exercises/fessiers.png';
+import imgAbdos from '../assets/exercises/abdos.png';
+import imgJambes from '../assets/exercises/jambes.png';
+import imgEpaules from '../assets/exercises/epaules.png';
+import imgPecs from '../assets/exercises/pecs.png';
+import imgBras from '../assets/exercises/bras.png';
+import imgDos from '../assets/exercises/dos.png';
+import imgCardio from '../assets/exercises/cardio.png';
+import imgEtirement from '../assets/exercises/etirement.png';
 
 const ExercicePage = () => {
     
@@ -21,15 +33,15 @@ const ExercicePage = () => {
   const [allExercises, setAllExercises] = useState([]);
 
   const exerciseCategories = [
-    { id: 'fessier', name: 'Fessier' ,color:"yellow",gridArea: "1 / 1 / 3 / 3"},
-    { id: 'waist', name: 'Abdos' ,color:"purple", gridArea:"1 / 3 / 3 / 5"},
-    { id: 'upper legs', name: 'Jambes' ,color:"pinkish", gridArea:"1 / 5 / 4 / 7"},
-    { id: 'shoulders', name: 'Epaules' ,color:"pinkish", gridArea:"3 / 1 / 5 / 3"},
-    { id: 'chest', name: 'Pecs' ,color:"yellow", gridArea:"3 / 3 / 5 / 5"},
-    { id: 'upper arms', name: 'Bras' ,color:"purple", gridArea:"5 / 1 / 6 / 5"},
-    { id: 'back', name: 'Dos' ,color:"purple", gridArea:"4 / 5 / 6 / 7"},
-    { id: 'cardio', name: 'Cardio' ,color:"yellow", gridArea:"6 / 1 / 9 / 4"},
-    { id: 'etirement', name: 'Etirement' ,color:"pinkish", gridArea:"6 / 4 / 9 / 7"},
+    { id: 'fessier', name: 'Fessier', color:"yellow", gridArea: "1 / 1 / 3 / 3", image: imgFessiers},
+    { id: 'waist', name: 'Abdos', color:"purple", gridArea:"1 / 3 / 3 / 5", image: imgAbdos},
+    { id: 'upper legs', name: 'Jambes', color:"pinkish", gridArea:"1 / 5 / 4 / 7", image: imgJambes},
+    { id: 'shoulders', name: 'Epaules', color:"pinkish", gridArea:"3 / 1 / 5 / 3", image: imgEpaules},
+    { id: 'chest', name: 'Pecs', color:"yellow", gridArea:"3 / 3 / 5 / 5", image: imgPecs},
+    { id: 'upper arms', name: 'Bras', color:"purple", gridArea:"5 / 1 / 6 / 5", image: imgBras},
+    { id: 'back', name: 'Dos', color:"purple", gridArea:"4 / 5 / 6 / 7", image: imgDos},
+    { id: 'cardio', name: 'Cardio', color:"yellow", gridArea:"6 / 1 / 9 / 4", image: imgCardio},
+    { id: 'etirement', name: 'Etirement', color:"pinkish", gridArea:"6 / 4 / 9 / 7", image: imgEtirement},
   ];
 
   // Fetch all exercises when component mounts
@@ -153,11 +165,18 @@ const ExercicePage = () => {
 
       {/* Exercise Categories Grid */}
       <div 
-        style={{gridTemplateColumns:'repeat(6, 1fr)', gridTemplateRows:'repeat(8, 1fr)'}}
+        style={{gridTemplateColumns:'repeat(6, 1fr)', gridTemplateRows:'repeat(7, 1fr)'}}
         className="grid gap-2">
         {exerciseCategories.map((category) => {
           // Special layout for wider items
-          let className = `bg-${category.color} rounded-xl flex items-center justify-center p-4`;
+          let className = `bg-${category.color} exercise-category rounded-xl flex items-center justify-center px-2 py-4 bg-no-repeat`;
+          
+          // Ajouter le style d'arrière-plan avec l'image importée
+          const backgroundStyle = {
+            backgroundImage: `url(${category.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          };
           
           if (category.id === 'bras' || category.id === 'dos') {
             className += ' col-span-2';
@@ -167,7 +186,7 @@ const ExercicePage = () => {
             <div
               key={category.id}
               className={className}
-              style={{gridArea:category.gridArea}}
+              style={{...backgroundStyle, gridArea:category.gridArea}}
               onClick={() => handleDrawerOpen(category)}
             >
               <span className="font-bold font-display text-white text-xl">{category.name}</span>

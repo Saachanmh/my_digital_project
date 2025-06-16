@@ -34,7 +34,7 @@ const TabBar = () => {
                     className={`flex flex-col items-center justify-center mx-3 focus:outline-none`}
                     onClick={() => navigate('/exercise')}
                 >
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/exercice') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isActive('/exercise') ? 'bg-[var(--color-yellow)]' : 'bg-gray-200'} mb-0`}>
                         <img 
                             src={imageEntrainement} 
                             alt="Entrainement" 

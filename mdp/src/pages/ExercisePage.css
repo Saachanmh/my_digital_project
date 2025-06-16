@@ -1,0 +1,56 @@
+.exercise-category:first-child{
+  background-position: left 0  bottom -10px !important;
+  background-size: 120px !important;
+  align-items: end !important;
+}
+
+.exercise-category:nth-child(2){
+  background-position: left 0  bottom -10px !important;
+  background-size: 91px !important;
+  align-items: end !important;
+}
+
+.exercise-category:nth-child(3){
+  background-position: left 0  bottom -10px !important;
+  background-size: 135px !important;
+  align-items: start !important;
+}
+
+.exercise-category:nth-child(4){
+  background-position: left -5px  bottom -10px !important;
+  align-items: end !important;
+  background-size: 95px !important;
+}
+
+.exercise-category:nth-child(5){
+  background-position: bottom -10px  center !important;
+  align-items: start !important;
+  background-size: 130px !important;
+}
+
+.exercise-category:nth-child(6){
+  background-position: bottom -40px  left !important;
+  background-size: 172px !important;
+  justify-content: end !important;
+}
+
+.exercise-category:nth-child(7){
+  background-position: bottom -30px  center !important;
+  background-size: 110px !important;
+  align-items: start !important;
+
+}
+
+.exercise-category:nth-child(8){
+  background-position: right -10px  bottom -10px !important;
+  background-size: 180px !important;
+  justify-content: start !important;
+  align-items: end !important;
+}
+
+.exercise-category:nth-child(9){
+  background-position: right -30px  bottom -10px !important;
+  background-size: 135px !important;
+  align-items: end !important;
+
+}
