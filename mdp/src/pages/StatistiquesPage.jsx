@@ -40,7 +40,7 @@ const StatistiquesPage = () => {
           value={550}
           maxValue={1000}
           percentage={55}
-          description="Votre dépense calorique ne que d'augmentez ces derniers temps ! Voici votre dépense de la semaine"
+          description="Votre dépense calorique ne fait que d'augmenter ces derniers temps ! Voici votre dépense de la semaine"
         />
         <CircularProgressCard
           title="Votre objectif"

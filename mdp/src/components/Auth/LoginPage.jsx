@@ -57,7 +57,7 @@ const LoginPage = () => {
       <h1 className="text-2xl font-bold mb-2 font-display">Connexion</h1>
       <p className="text-gray-700 mb-1">Entrez vos informations</p>
       <p className="text-gray-700 mb-6">
-        Pas de compte ? <Link to="/signup" className="text-blue-500 underline">Inscris-toi</Link>
+        Pas de compte ? <Link to="/signup" className="text-blue-500 underline">Inscrivez-vous</Link>
       </p>
 
       {error && (

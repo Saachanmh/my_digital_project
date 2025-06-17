@@ -16,6 +16,23 @@
   src: url("../public/fonts/Elevon\ TwoG.woff2") format("woff2");
 }
 
+/* Ensure proper scrolling behavior */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+}
+
+/* Fix for mobile scrolling issues */
+.overflow-auto, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
 @theme {
   --font-display: "Elevon";
 

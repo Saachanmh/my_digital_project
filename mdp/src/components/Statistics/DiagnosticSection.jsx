@@ -6,7 +6,7 @@ const DiagnosticSection = () => {
     <>
       <Card variant="outlined" className="!rounded-3xl">
         <CardContent>
-        <h2 className="font-display font-bold text-lg mb-4">Diagnostique</h2>
+        <h2 className="font-display font-bold text-lg mb-4">Diagnostic</h2>
           <Box className="flex justify-evenly items-center">
             <DiagnosticItem label="IMC" value="21.9" />
             <Divider orientation="vertical" flexItem className="mx-2" />
