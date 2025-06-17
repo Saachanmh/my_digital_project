@@ -8,8 +8,8 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white overflow-auto">
       <div className="flex items-center p-4 border-b border-gray-200">
-        <button 
-          onClick={() => navigate(-1)} 
+        <button
+          onClick={() => navigate(-1)}
           className="mr-2 text-[var(--color-purple)] hover:text-[var(--color-purple-700)]"
         >
           ← Retour
@@ -21,7 +21,8 @@ const LoginPage = () => {
         <LoginComponent />
         <div className="text-center mt-4">
           <Link to="/signup" className="text-[var(--color-purple)] hover:text-[var(--color-purple-700)] underline">
-            Pas de compte ? Inscrivez-vous
+            Pas de compte ?
+              Inscrivez-vous
           </Link>
         </div>
       </div>
