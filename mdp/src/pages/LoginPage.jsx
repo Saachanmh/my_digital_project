@@ -21,7 +21,7 @@ const LoginPage = () => {
         <LoginComponent />
         <div className="text-center mt-4">
           <Link to="/signup" className="text-[var(--color-purple)] hover:text-[var(--color-purple-700)] underline">
-            Pas de compte ? Inscris-toi
+            Pas de compte ? Inscrivez-vous
           </Link>
         </div>
       </div>
