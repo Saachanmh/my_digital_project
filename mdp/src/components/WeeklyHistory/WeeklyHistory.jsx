@@ -79,7 +79,7 @@ const WeeklyHistory = () => {
 
   return (
     <div className='p-4'>
-      <div className="px-2 mb-5 bg-yellow text-dark rounded-2xl">
+      <div className="px-2 bg-yellow text-dark rounded-2xl">
         <h3 className="text-lg py-4 font-display font-bold">Historique de la semaine</h3>
         {loading ? (
           <div className="flex justify-center pb-4">

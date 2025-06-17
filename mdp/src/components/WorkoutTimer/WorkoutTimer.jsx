@@ -299,10 +299,10 @@ const WorkoutTimer = () => {
       </main>
 
       {/* Footer with timer */}
-      <footer className="bg-gray-200 p-6 pb-24 rounded-t-3xl relative">
+      <footer className="bg-purple p-6 pb-24 rounded-t-3xl relative">
         {/* Checkmark icon in center top */}
         <div 
-          className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 ${isExerciseCompleted ? 'bg-green-500' : 'bg-gray-200'} rounded-full flex items-center justify-center cursor-pointer ${!isResting && !isExerciseCompleted ? 'hover:bg-green-400' : ''}`}
+          className={`absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 ${isExerciseCompleted ? 'bg-yellow' : 'bg-gray-200'} rounded-full flex items-center justify-center cursor-pointer ${!isResting && !isExerciseCompleted ? 'hover:bg-yellow-400' : ''}`}
           onClick={!isResting && !isExerciseCompleted ? handleValidateExercise : undefined}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -312,8 +312,8 @@ const WorkoutTimer = () => {
         
         {/* Timer */}
         <div className="text-center pt-4">
-          <div className="text-5xl font-bold mb-2">{formatTime(time)}</div>
-          <div className="text-sm text-gray-600">
+          <div className="text-5xl text-white font-display font-bold mb-2">{formatTime(time)}</div>
+          <div className="text-sm text-white">
             {isResting ? 'Temps de repos' : 'Temps d\'exercice'}
           </div>
         </div>

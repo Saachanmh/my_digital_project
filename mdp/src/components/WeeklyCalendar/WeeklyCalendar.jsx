@@ -120,7 +120,7 @@ const WeeklyCalendar = () => {
       </div>
 
       {/* Daily Workout Card with navigation controls at the top */}
-      <div className="bg-dark text-white rounded-2xl p-5 flex justify-between items-center mb-5 relative overflow-hidden -mt-4 shadow-normal">
+      <div className="bg-dark text-white rounded-2xl p-5 flex justify-between items-center relative overflow-hidden -mt-4 shadow-normal">
         {/* Top curve cutout */}
         <svg className='absolute top-0 left-1/2 transform -translate-x-1/2' width="62" height="14" viewBox="0 0 62 14" fill="white" xmlns="http://www.w3.org/2000/svg">
           <path d="M31.5 14C18 14 12 0 0 0H62C50 0 45 14 31.5 14Z"/>
@@ -129,7 +129,7 @@ const WeeklyCalendar = () => {
 
         <div className="mt-2 w-full">
           <h3 className="text-lg font-medium mb-2">{currentWorkout.title}</h3>
-          <p className="text-base">{currentWorkout.exercises}</p>
+          <p className="text-base mb-3">{currentWorkout.exercises}</p>
           <button
             onClick={handleSessionButtonClick}
             className="p-2 bg-yellow rounded-xl cursor-pointer hover:bg-gray-100 active:bg-gray-200 text-dark"
