@@ -245,7 +245,7 @@ const WorkoutSession = () => {
   };
 
   return (
-    <div className="p-4 bg-white min-h-screen relative">
+    <div className="p-4 pb-24 bg-white min-h-screen relative">
       {/* Back button in top left corner */}
       <button 
         onClick={handleGoBack}
