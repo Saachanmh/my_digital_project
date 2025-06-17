@@ -192,7 +192,7 @@ const WorkoutSession = () => {
   // Afficher un message de chargement
   if (isLoading) {
     return (
-      <div className="p-4 bg-white min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <p>Chargement de la séance...</p>
       </div>
     );
@@ -201,7 +201,7 @@ const WorkoutSession = () => {
   // Afficher un message d'erreur
   if (error) {
     return (
-      <div className="p-4 bg-white min-h-screen flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <p className="text-red-500 mb-4">{error}</p>
         <button 
           onClick={() => navigate('/training')}
@@ -216,7 +216,7 @@ const WorkoutSession = () => {
   // Afficher un message si la séance n'existe pas
   if (!session) {
     return (
-      <div className="p-4 bg-white min-h-screen flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <p className="mb-4">Séance non trouvée</p>
         <button 
           onClick={() => navigate('/training')}
@@ -271,7 +271,7 @@ const WorkoutSession = () => {
       </div>
       
       {/* Duration and Calories */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 justify-center">
         <div className="bg-purple rounded-full px-4 py-2 flex items-center justify-center">
           <span className="text-white">{formatDuration(session.duration)}</span>
         </div>
