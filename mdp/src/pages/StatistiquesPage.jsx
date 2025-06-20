@@ -32,7 +32,7 @@ const StatistiquesPage = () => {
   return (
     <Box className="w-full p-4 pb-24">
       <h1 className="font-display text-2xl mb-4">Statistiques</h1>
-      
+
       {/* Calorie and Objective Cards */}
       <Box className="flex gap-8 mb-10">
         <CircularProgressCard
@@ -50,37 +50,37 @@ const StatistiquesPage = () => {
           description="Gardez votre rythme vous êtes proche de vos objectifs"
         />
       </Box>
-      
+
       {/* Tabs */}
-      <Box className="flex gap-1 mb-4 justify-evenly">
-        <ProgressTab 
+      <Box className="flex gap-1 mb-4 justify-center">
+        <ProgressTab
           className="flex-1"
-          label="Poids" 
-          selected={selectedTab === 'poids'} 
-          onClick={() => handleTabChange('poids')} 
+          label="Poids"
+          selected={selectedTab === 'poids'}
+          onClick={() => handleTabChange('poids')}
         />
-        <ProgressTab 
+        <ProgressTab
           className="flex-1"
 
-          label="Mesure" 
-          selected={selectedTab === 'mesure'} 
-          onClick={() => handleTabChange('mesure')} 
+          label="Mesure"
+          selected={selectedTab === 'mesure'}
+          onClick={() => handleTabChange('mesure')}
         />
-        <ProgressTab 
+        <ProgressTab
           className="flex-1"
 
-          label="Avance" 
-          selected={selectedTab === 'avance'} 
-          onClick={() => handleTabChange('avance')} 
+          label="Avance"
+          selected={selectedTab === 'avance'}
+          onClick={() => handleTabChange('avance')}
         />
       </Box>
-      
+
       {/* Weight Progress Section */}
       <div className='mb-4'>
         {tabsContent[selectedTab]?.component}
       </div>
-        
-      
+
+
       {/* Diagnostic Section */}
       <DiagnosticSection />
     </Box>

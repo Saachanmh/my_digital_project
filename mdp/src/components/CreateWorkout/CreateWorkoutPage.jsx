@@ -12,13 +12,13 @@ const CreateWorkoutPage = () => {
   const [calories, setCalories] = useState(300); // Default 300 calories
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Utiliser le contexte de stockage
-  const { 
-    addSession, 
+  const {
+    addSession,
     addExercise,
     getAllExercises,
-    isInitialized 
+    isInitialized
   } = useStorageContext();
 
   // Charger les exercices disponibles
@@ -33,7 +33,7 @@ const CreateWorkoutPage = () => {
           console.error('Erreur lors du chargement des exercices:', error);
         }
       };
-      
+
       loadExercises();
     }
   }, [isInitialized, getAllExercises]);
@@ -44,9 +44,9 @@ const CreateWorkoutPage = () => {
       alert('Veuillez donner un nom à votre séance');
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       // Créer la nouvelle séance
       const newSession = createSession(
@@ -55,10 +55,10 @@ const CreateWorkoutPage = () => {
         duration,
         calories
       );
-      
+
       // Ajouter la séance à la base de données
       const sessionId = await addSession(newSession);
-      
+
       // Rediriger vers la page de la séance
       navigate(`/workout-session/${sessionId}`);
     } catch (error) {
@@ -85,12 +85,12 @@ const CreateWorkoutPage = () => {
         </div>
 
         {/* Time and calories selectors */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-3 mb-8 justify-center">
           <div className="relative flex-1">
             <div className="w-8 h-8 rounded-full bg-gray-300 absolute -top-3 left-4 z-10"></div>
             <div className="w-full bg-white rounded-full p-4 pl-16 flex items-center justify-center shadow-sm border border-gray-200">
-              <input 
-                type="number" 
+              <input
+                type="number"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
                 className="w-12 bg-transparent text-center focus:outline-none"
@@ -103,8 +103,8 @@ const CreateWorkoutPage = () => {
           <div className="relative flex-1">
             <div className="w-8 h-8 rounded-full bg-gray-300 absolute -top-3 left-4 z-10"></div>
             <div className="w-full bg-white rounded-full p-4 pl-16 flex items-center justify-center shadow-sm border border-gray-200">
-              <input 
-                type="number" 
+              <input
+                type="number"
                 value={calories}
                 onChange={(e) => setCalories(Number(e.target.value))}
                 className="w-12 bg-transparent text-center focus:outline-none"
@@ -119,7 +119,7 @@ const CreateWorkoutPage = () => {
         {/* Exercises section */}
         <div className="mb-6">
           <h2 className="text-base font-medium mb-4">Exercices</h2>
-          <button 
+          <button
             className="w-full bg-gray-200 rounded-3xl p-6 text-center shadow-sm"
             onClick={() => {
               // Créer la nouvelle séance d'abord
@@ -127,7 +127,7 @@ const CreateWorkoutPage = () => {
                 alert('Veuillez donner un nom à votre séance avant d\'ajouter un exercice');
                 return;
               }
-              
+
               const createSessionAndRedirect = async () => {
                 setIsLoading(true);
                 try {
@@ -138,10 +138,10 @@ const CreateWorkoutPage = () => {
                     duration,
                     calories
                   );
-                  
+
                   // Ajouter la séance à la base de données
                   const sessionId = await addSession(newSession);
-                  
+
                   // Rediriger vers la page de création d'exercice avec le sessionId
                   navigate(`/create-exercise?sessionId=${sessionId}`);
                 } catch (error) {
@@ -151,7 +151,7 @@ const CreateWorkoutPage = () => {
                   setIsLoading(false);
                 }
               };
-              
+
               createSessionAndRedirect();
             }}
           >
